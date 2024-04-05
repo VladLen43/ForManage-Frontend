@@ -11,19 +11,15 @@ import { Inputt } from '../components/Input/Input'
 export const Home = () => {
 
   const dispatch = useAppDispatch();
+  const isAutht = useAppSelector(isAuth);
+  const navigate = useNavigate();
+  const todos = useAppSelector(state => state.todos.list)
+  const {loading, error} = useAppSelector(state => state.todos)
+  const userData = useAppSelector((state) => state.auth.data)
     
   useEffect( () => {
     dispatch(fetchTodo())
   },[dispatch])
-
-
-    const isAutht = useAppSelector(isAuth);
-    const navigate = useNavigate();
-
-    const todos = useAppSelector(state => state.todos.list)
-    const {loading, error} = useAppSelector(state => state.todos)
-    const userData = useAppSelector((state) => state.auth.data)
-
    
     if(!isAutht) {
         navigate('/login')

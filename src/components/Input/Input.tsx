@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useAppDispatch, useAppSelector } from '../../redux/hooks';
 //import { addTodoToBase } from '../../redux/reducers/todoSlice';
 import styles from './Input.module.scss'
-import { createTodo } from '../../redux/reducers/todoSlice';
+import { createTodo, fetchTodo } from '../../redux/reducers/todoSlice';
 import { Button,Input } from '@mui/material';
 
 export const Inputt = () => {
@@ -18,8 +18,12 @@ const addTask = () => {
     console.log(title)
     setText('')
 }
-const [title, setText] = React.useState('');
 
+const [title, setText] = React.useState('');
+useEffect( () => {
+  dispatch(fetchTodo())
+},[dispatch])
+console.log()
 
   return (
     <label>

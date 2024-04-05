@@ -27,46 +27,55 @@ export const fetchTodo = createAsyncThunk<todoList, undefined, {rejectValue : st
 export const deleteTodos = createAsyncThunk (
     'todos/deleteTodo',
     async function(id: string, {dispatch},) {
-            axios.delete(`/todos/${id}`)
+           await axios.delete(`/todos/${id}`)
   
     }
 )
 
-export const toggleStatus = createAsyncThunk(
+
+export const toggleStatus = createAsyncThunk (
     'todos/toggleStatus',
-    async function(id:string, {rejectWithValue, dispatch,getState}) {
-        //@ts-ignore
-        const isChecked = getState().todos.list.find(todo => todo.id === id);
+
+    async (id) => {
+        const {data} = await axios.patch(`/todos/${id}`)
+        return data;
+    }
+)
+// export const toggleStatus = createAsyncThunk(
+//     'todos/toggleStatus',
+//     async function(id:string, {rejectWithValue, dispatch,getState}) {
+//         //@ts-ignore
+//         const isChecked = getState().todos.list.find(todo => todo.id === id);
         
-        try{
-            const responce = await fetch(`/todos/${id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    checked : !isChecked
-                })
-            })
+//         try{
+//             const responce = await fetch(`/todos/${id}`, {
+//                 method: 'PATCH',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify({
+//                     checked : !isChecked
+//                 })
+//             })
         
-            if(!responce.ok) {
-                throw new Error ('Hello, unlucky to change status')
-            }
-            const data = await responce.json();
-            console.log(responce)
+//             if(!responce.ok) {
+//                 throw new Error ('Hello, unlucky to change status')
+//             }
+//             const data = await responce.json();
+//             console.log(responce)
     
-            dispatch(changeStatus({id}))
-            return data;
+//             dispatch(changeStatus({id}))
+//             return data;
  
            
 
-        }
-        catch(error:any) {
-            return rejectWithValue(error.message)
-        }
+//         }
+//         catch(error:any) {
+//             return rejectWithValue(error.message)
+//         }
         
-    }
-)
+//     }
+// )
 
 export const createTodo = createAsyncThunk(
     'todos/createTodo',
@@ -164,10 +173,12 @@ const todoSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload
             })
-            // .addCase(addTodoToBase.rejected, (state,action) => {
-            //     state.loading = false;
-            //     state.error = action.payload
-            // })
+            .addCase(createTodo.rejected, (state,action) => {
+                state.loading = false;
+                //@ts-ignore
+                state.list = action.payload
+                state.error = action.payload
+            })
     }
 })
 

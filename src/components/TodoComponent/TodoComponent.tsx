@@ -12,6 +12,7 @@ export const TodoComponent:React.FC<TodoProps> = ({id, title}) => {
 
 
     const dispatch = useAppDispatch();
+
     useEffect( () => {
       dispatch(fetchTodo())
     },[dispatch])
@@ -23,7 +24,8 @@ export const TodoComponent:React.FC<TodoProps> = ({id, title}) => {
       dispatch(deleteTodos(id))
     }
   return (  
-     <li>          
+     <li>       
+      {/*  @ts-ignore */}   
         <input type="checkbox" onChange={() => dispatch(toggleStatus(id))} />
         <span>{title}</span>
         <button onClick={() => dispatch(deleteTodos(id))}>Удалить</button>

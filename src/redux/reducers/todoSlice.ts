@@ -24,20 +24,11 @@ export const fetchTodo = createAsyncThunk<todoList, undefined, {rejectValue : st
    }
 )
 
-export const deleteTodo = createAsyncThunk (
-    'todos/removeTodo',
-    async function(id: string, {rejectWithValue, dispatch},) {
-        try{
-        const { data } = await axios.delete(`http://localhost:4444/todos/${id}`)
-
-        dispatch(removeTodo({id}))
-        return data;
-    
-        
-        }
-        catch(error:any) {
-            return rejectWithValue(error.message)
-        }
+export const deleteTodos = createAsyncThunk (
+    'todos/deleteTodo',
+    async function(id: string, {dispatch},) {
+            axios.delete(`/todos/${id}`)
+  
     }
 )
 
@@ -45,16 +36,16 @@ export const toggleStatus = createAsyncThunk(
     'todos/toggleStatus',
     async function(id:string, {rejectWithValue, dispatch,getState}) {
         //@ts-ignore
-        const isCompletedTodoId = getState().todos.list.find(todo => todo.id === id);
+        const isChecked = getState().todos.list.find(todo => todo.id === id);
         
         try{
-            const responce = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+            const responce = await fetch(`/todos/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    completed : !isCompletedTodoId
+                    checked : !isChecked
                 })
             })
         
@@ -77,37 +68,50 @@ export const toggleStatus = createAsyncThunk(
     }
 )
 
-export const addTodoToBase = createAsyncThunk(
-    'todos/addTodoToBase',
-    async function(title: string,{rejectWithValue, dispatch, getState}) {
-        const todo: todoList = {
-            UserId: new Date().toISOString(),
-            //@ts-ignore
-            id: getState().todos.list.find(todo => todo.id + 1),
+export const createTodo = createAsyncThunk(
+    'todos/createTodo',
+    async (title,user) => {
+
+        const todo = {
             title: title,
-            completed: false,
+            imageUrl: '',
+            user: user
         }
-        try{
-            const responce = await fetch('https://jsonplaceholder.typicode.com/todos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(todo)
-            })
-            if(!responce.ok){
-                throw new Error('Some Problem with adding')
-            }
-            const data = await responce.json()
-            dispatch(addTodo(data))
-            console.log(data)
-            return data;
-        }
-        catch{
-            
-        }
+        const {data} = await axios.post('/todos', todo)
+        return data;
     }
 )
+
+// export const addTodoToBase = createAsyncThunk(
+//     'todos/addTodoToBase',
+//     async function(title: string, {rejectWithValue, dispatch, getState}) {
+//         const todo: todoList = {
+//             //@ts-ignore
+//             id: getState().todos.list.find(todo => todo.id + 1),
+//             title: title,
+//             completed: false,
+//         }
+//         try{
+//             const responce = await fetch('https://jsonplaceholder.typicode.com/todos', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify(todo)
+//             })
+//             if(!responce.ok){
+//                 throw new Error('Some Problem with adding')
+//             }
+//             const data = await responce.json()
+//             dispatch(addTodo(data))
+//             console.log(data)
+//             return data;
+//         }
+//         catch{
+            
+//         }
+//     }
+// )
 
 
 const initialState: todoState = {
@@ -150,7 +154,9 @@ const todoSlice = createSlice({
                 state.error = action.payload;
                 state.loading = false;
             })
-            .addCase(deleteTodo.rejected, (state,action) => {
+            .addCase(deleteTodos.rejected, (state,action) => {
+                              //@ts-ignore
+                state.list = state.list.filter(todo => todo.id !== action.payload.id)
                 state.loading = false;
                 state.error = action.payload
             })
@@ -158,10 +164,10 @@ const todoSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload
             })
-            .addCase(addTodoToBase.rejected, (state,action) => {
-                state.loading = false;
-                state.error = action.payload
-            })
+            // .addCase(addTodoToBase.rejected, (state,action) => {
+            //     state.loading = false;
+            //     state.error = action.payload
+            // })
     }
 })
 

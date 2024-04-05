@@ -1,22 +1,30 @@
 import React from 'react';
-import {useAppDispatch } from '../../redux/hooks';
-import { addTodoToBase } from '../../redux/reducers/todoSlice';
+import {useAppDispatch, useAppSelector } from '../../redux/hooks';
+//import { addTodoToBase } from '../../redux/reducers/todoSlice';
 import styles from './Input.module.scss'
+import { createTodo } from '../../redux/reducers/todoSlice';
+import { Button,Input } from '@mui/material';
 
-export const Input = () => {
+export const Inputt = () => {
 
 const dispatch = useAppDispatch();
+const userData = useAppSelector((state) => state.auth.data)
 
 const addTask = () => {
-    dispatch(addTodoToBase(text))
+  //@ts-ignore
+  const user = userData?._id
+  //@ts-ignore
+    dispatch(createTodo(title,user))
+    console.log(title)
     setText('')
 }
-const [text, setText] = React.useState('');
+const [title, setText] = React.useState('');
+
 
   return (
     <label>
-        <input className={styles.input} type="text" value={text} onChange={event => setText(event.target.value)} />
-        <button onClick={addTask}>Добавить</button>
+        <Input type="text" value={title} onChange={event => setText(event.target.value)} />
+        <Button onClick={addTask}>Добавить</Button>
     </label>
   )
 }

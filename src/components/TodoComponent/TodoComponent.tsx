@@ -1,22 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAppDispatch } from '../../redux/hooks'
-import { toggleStatus,deleteTodo } from '../../redux/reducers/todoSlice'
+import { toggleStatus,deleteTodos, fetchTodo } from '../../redux/reducers/todoSlice'
 
-interface TodoProps {
+type TodoProps = {
     id: string;
     title: string;
-    completed: boolean;
 }
 
-export const TodoComponent:React.FC<TodoProps> = ({id, title, completed}) => {
+
+export const TodoComponent:React.FC<TodoProps> = ({id, title}) => {
+
 
     const dispatch = useAppDispatch();
+    useEffect( () => {
+      dispatch(fetchTodo())
+    },[dispatch])
+    console.log()
 
+    const removeTodo = () => {
+      //@ts-ignore
+      dispatch(removeTodo(id))
+      dispatch(deleteTodos(id))
+    }
   return (  
      <li>          
-        <input type="checkbox" checked={completed} onChange={() => dispatch(toggleStatus(id))} />
+        <input type="checkbox" onChange={() => dispatch(toggleStatus(id))} />
         <span>{title}</span>
-        <button onClick={() => dispatch(deleteTodo(id))}>Удалить</button>
+        <button onClick={() => dispatch(deleteTodos(id))}>Удалить</button>
+
     </li>
   )
 }

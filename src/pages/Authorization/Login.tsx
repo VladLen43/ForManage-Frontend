@@ -4,7 +4,7 @@ import styles from './Login.module.scss';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { fetchUserData, isAuth } from '../../redux/reducers/auth';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
   const isAutht = useAppSelector(isAuth)
@@ -43,8 +43,9 @@ export const LoginPage = () => {
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form} action="">
          <TextField {...register('email', { required: 'Укажите почту'})} type='email' error={Boolean(errors.email?.message)} helperText={errors.email?.message} id="standard-basic" label="Standard" variant="standard" />
          <TextField {...register('password', { required: 'Укажите пароль'})} error={Boolean(errors.password?.message)} helperText={errors.password?.message} id="standard-basic" label="Standard" variant="standard" />
-         <Button type='submit' variant="contained">Войти</Button>
+         <Button disabled={!isValid} type='submit' variant="contained">Войти</Button>
         </form>
+        <Link to="/register">Нет аккаунта? Зарегистрируйтесь !</Link>
     </div>
   )
 }

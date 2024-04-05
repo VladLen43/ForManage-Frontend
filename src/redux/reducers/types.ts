@@ -2,7 +2,8 @@ export type todoList = {
     id: string;
     title: string;
     completed: boolean;
-    UserId: string | number;
+    user: string | number;
+
 }
 
 export type todoState = {

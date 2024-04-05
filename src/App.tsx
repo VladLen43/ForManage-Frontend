@@ -1,5 +1,4 @@
 import './App.css';
-import { Input } from './components/Input/Input';
 import { TodoComponent } from './components/TodoComponent/TodoComponent';
 import { useAppSelector,useAppDispatch } from './redux/hooks';
 import { useEffect } from 'react';
@@ -9,6 +8,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import { LoginPage } from './pages/Authorization/Login';
 import { Home } from './pages/Home';
 import { fetchAuthMe, isAuth } from './redux/reducers/auth';
+import { Register } from './pages/Registration/Register';
 
 function App() {
 
@@ -24,6 +24,7 @@ function App() {
         <Routes>
           <Route path='/login' element={<LoginPage/>} />
           <Route path='/' element={<Home />} />
+          <Route path='/register' element={<Register/>} />
         </Routes>
       
     </div>

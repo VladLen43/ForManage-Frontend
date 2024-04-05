@@ -1,4 +1,4 @@
-import { Button, Input } from '@mui/material'
+import { Button } from '@mui/material'
 import React, { useEffect } from 'react'
 import { TodoComponent } from '../components/TodoComponent/TodoComponent'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
@@ -6,20 +6,25 @@ import { fetchTodo } from '../redux/reducers/todoSlice'
 import styles from './Home.module.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { isAuth, logout } from '../redux/reducers/auth'
+import { Inputt } from '../components/Input/Input'
 
 export const Home = () => {
 
-    const isAutht = useAppSelector(isAuth);
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-
-    useEffect( () => {
-        dispatch(fetchTodo())
+  const dispatch = useAppDispatch();
+    
+  useEffect( () => {
+    dispatch(fetchTodo())
   },[dispatch])
+
+
+    const isAutht = useAppSelector(isAuth);
+    const navigate = useNavigate();
 
     const todos = useAppSelector(state => state.todos.list)
     const {loading, error} = useAppSelector(state => state.todos)
+    const userData = useAppSelector((state) => state.auth.data)
 
+   
     if(!isAutht) {
         navigate('/login')
       }
@@ -28,19 +33,25 @@ export const Home = () => {
         dispatch(logout())
         window.localStorage.removeItem('token')
     }
+
+    const todosRender =  todos.filter(
+      /* @ts-ignore */
+(todo) => userData?._id === todo.user._id )
+    console.log(todosRender)
   return (
     <div className={styles.container}>
         <h1>Todo List</h1>
-      <Input />
+        <Inputt></Inputt>
       {loading === true && <h2>Loading...</h2>}
       {error && <h2>{error}</h2>}
       <ul>
-        { todos.map(todo => (
-            <TodoComponent key= {todo.id} {...todo} />
+        { /* @ts-ignore */}
+        { todosRender.map((todo) => (
+          //@ts-ignore
+          <TodoComponent key= {todo._id} id={todo._id} title={todo.title} />
         ))}
- 
+       
       </ul>
       <Button onClick={handleLogout} variant="contained">Выйти</Button>
     </div>
-  )
-}
+  )}

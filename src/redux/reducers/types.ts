@@ -1,8 +1,8 @@
 export type todoList = {
-    id: string;
+    _id: string;
     title: string;
     completed: boolean;
-    user: string | number;
+    user: string | number | undefined;
 
 }
 
@@ -12,8 +12,8 @@ export type todoState = {
     error: any;
 }
 export type removeTodos = {
-    id: string;
+    _id: string;
 }
 export type changeStatuss = {
-    id: string;
+    _id: string;
 }

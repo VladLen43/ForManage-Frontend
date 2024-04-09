@@ -1,34 +1,40 @@
-import React, { useEffect } from 'react'
-import { useAppDispatch } from '../../redux/hooks'
-import { toggleStatus,deleteTodos, fetchTodo } from '../../redux/reducers/todoSlice'
+import React, { useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+import { toggleStatus,deleteTodos, fetchTodo, removeTodo } from '../../redux/reducers/todoSlice'
+import { removeTodos } from '../../redux/reducers/types';
 
 type TodoProps = {
-    id: string;
+    _id: removeTodos;
     title: string;
+    completed: boolean;
 }
 
 
-export const TodoComponent:React.FC<TodoProps> = ({id, title}) => {
+export const TodoComponent:React.FC<TodoProps> = ({_id, title, completed}) => {
 
-
+    const userData = useAppSelector((state) => state.auth.data)
+    //@ts-ignore
+    const user = userData?.user._id
     const dispatch = useAppDispatch();
-
-    useEffect( () => {
-      dispatch(fetchTodo())
-    },[dispatch])
-    console.log()
-
-    const removeTodo = () => {
+    useEffect(() => {
       //@ts-ignore
-      dispatch(removeTodo(id))
-      dispatch(deleteTodos(id))
+      dispatch(fetchTodo(user))
+    },[dispatch])
+
+    const removTodo = () => {
+      dispatch(removeTodo(_id))
+      dispatch(deleteTodos(_id))
     }
+ 
+
+
   return (  
      <li>       
       {/*  @ts-ignore */}   
-        <input type="checkbox" onChange={() => dispatch(toggleStatus(id))} />
+        <input type="checkbox" checked="" onChange={() => dispatch(toggleStatus(_id))} />
         <span>{title}</span>
-        <button onClick={() => dispatch(deleteTodos(id))}>Удалить</button>
+        {/* @ts-ignore */}
+        <button onClick={() => removTodo()}>Удалить</button>
 
     </li>
   )

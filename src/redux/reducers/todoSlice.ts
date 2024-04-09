@@ -1,82 +1,94 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import {todoState, removeTodos, changeStatuss, todoList } from "./types";
 import axios from '../../axios';
+import { useAppSelector } from "../hooks";
+import { authData, isAuth } from "./auth";
 
 
 export const fetchTodo = createAsyncThunk<todoList, undefined, {rejectValue : string}> (
    'todos/fetchTodos', 
-   async function (_, {rejectWithValue}) {
+   async function (userId, {rejectWithValue, getState}) {
 
-    try{ 
-        const { data } = await axios.get('/todos')
-
-       
+    try{
+        console.log(userId)
+        const { data } = await axios.get('/todos', userId)
         return data;
-        
-
     } catch (error: any) {
        return rejectWithValue(error.message);
     }
-
-       
-        
-        
    }
 )
 
 export const deleteTodos = createAsyncThunk (
     'todos/deleteTodo',
-    async function(id: string, {dispatch},) {
-            axios.delete(`/todos/${id}`)
-  
+    async function(id: removeTodos, {dispatch},) {
+          const { data } = await axios.delete(`/todos/${id}`)
+           //@ts-ignore
+            dispatch(removeTodo(id))
+            return data
     }
 )
 
-export const toggleStatus = createAsyncThunk(
+
+export const toggleStatus = createAsyncThunk (
     'todos/toggleStatus',
-    async function(id:string, {rejectWithValue, dispatch,getState}) {
+
+    async (id, {getState, dispatch}) => {
         //@ts-ignore
-        const isChecked = getState().todos.list.find(todo => todo.id === id);
+        const comp:todoList = getState().todos.list.find(todo => todo._id === id);
+        const {data} = await axios.patch(`/todos/${id}`, {
+                completed: !comp
+        })
+        return data;
+    }
+)
+// export const toggleStatus = createAsyncThunk(
+//     'todos/toggleStatus',
+//     async function(id:string, {rejectWithValue, dispatch,getState}) {
+//         //@ts-ignore
+//         const isChecked = getState().todos.list.find(todo => todo.id === id);
         
-        try{
-            const responce = await fetch(`/todos/${id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    checked : !isChecked
-                })
-            })
+//         try{
+//             const responce = await fetch(`http://localhost:4444/todos/${id}`, {
+//                 method: 'PATCH',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify({
+//                     completed : !isChecked
+//                 })
+//             })
         
-            if(!responce.ok) {
-                throw new Error ('Hello, unlucky to change status')
-            }
-            const data = await responce.json();
-            console.log(responce)
+//             if(!responce.ok) {
+//                 console.log(responce)
+//                 throw new Error ('Hello, unlucky to change status')
+//             }
+//             const data = await responce.json();
+//             console.log(responce)
     
-            dispatch(changeStatus({id}))
-            return data;
+//             dispatch(changeStatus({id}))
+//             return data;
  
            
 
-        }
-        catch(error:any) {
-            return rejectWithValue(error.message)
-        }
+//         }
+//         catch(error:any) {
+//             return rejectWithValue(error.message)
+//         }
         
-    }
-)
+//     }
+// )
 
 export const createTodo = createAsyncThunk(
     'todos/createTodo',
-    async (title,user) => {
+    async (title: string,userId) => {
 
         const todo = {
             title: title,
             imageUrl: '',
-            user: user
+            user: userId
         }
+        console.log(userId)
         const {data} = await axios.post('/todos', todo)
         return data;
     }
@@ -126,14 +138,15 @@ const todoSlice = createSlice({
     reducers: {
         addTodo(state,action : PayloadAction<todoList>)  {
             if (action.payload) {
-          state.list.push(action.payload);
+            state.list.push(action.payload);
+            console.log(state.list)
         }
         },
         removeTodo(state, action : PayloadAction<removeTodos>) {
-            state.list = state.list.filter(todo => todo.id !== action.payload.id)
+            state.list = state.list.filter(todo => todo._id !== action.payload._id)
         },
         changeStatus(state, action : PayloadAction<changeStatuss>) {
-            const todo = state.list.find(todo => todo.id === action.payload.id)
+            const todo = state.list.find(todo => todo._id === action.payload._id)
             if (todo) {
                 todo.completed = !todo.completed
             }
@@ -154,22 +167,41 @@ const todoSlice = createSlice({
                 state.error = action.payload;
                 state.loading = false;
             })
+            .addCase(deleteTodos.fulfilled, (state,action) => {
+                //@ts-ignore
+                    state.list = state.list.filter(todo => todo.id !== action.payload.id)
+            })
             .addCase(deleteTodos.rejected, (state,action) => {
                               //@ts-ignore
                 state.list = state.list.filter(todo => todo.id !== action.payload.id)
                 state.loading = false;
                 state.error = action.payload
             })
+            .addCase(toggleStatus.fulfilled, (state,action) => {
+                state.loading = false;
+                state.error = action.payload
+                state.list = action.payload
+            })
             .addCase(toggleStatus.rejected, (state,action) => {
                 state.loading = false;
                 state.error = action.payload
             })
-            // .addCase(addTodoToBase.rejected, (state,action) => {
-            //     state.loading = false;
-            //     state.error = action.payload
-            // })
+            .addCase(createTodo.fulfilled, (state,action) => {
+                state.loading = false;
+                if (action.payload) {
+                    state.list.push(action.payload);
+                    console.log(state.list)
+                }
+                state.error = null
+            })
+            .addCase(createTodo.rejected, (state,action) => {
+                state.loading = false;
+                //@ts-ignore
+                state.list = action.payload
+                state.error = action.payload
+            })
     }
 })
 
-const {addTodo, removeTodo, changeStatus} = todoSlice.actions;
+export const {addTodo, removeTodo, changeStatus} = todoSlice.actions;
 export default todoSlice.reducer;

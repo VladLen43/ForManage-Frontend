@@ -2,7 +2,7 @@ import { Button, Input } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { TodoComponent } from '../components/TodoComponent/TodoComponent'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { addTodo, createTodo, deleteTodos, fetchTodo, removeTodo } from '../redux/reducers/todoSlice'
+import { addTodo, createTodo, deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus } from '../redux/reducers/todoSlice'
 import styles from './Home.module.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { isAuth, logout } from '../redux/reducers/auth'
@@ -61,6 +61,11 @@ export const Home = () => {
     
     const [title, setText] = React.useState('');
     
+    const isComplete = (id: any) => {
+      // dispatch(changeStatus(id))
+      //@ts-ignore
+      dispatch(toggleStatus(id))
+    }
    
   return (
     <div className={styles.container}>
@@ -78,9 +83,9 @@ export const Home = () => {
          todos.map((todo, index) => (
           //@ts-ignore
           // <TodoComponent key= {index} _id={todo._id} title={todo.title} completed={todo.completed} />
-          <li key={index}>       
+          <li key={todo._id}>       
           {/*  @ts-ignore */}   
-            <input type="checkbox" checked="" onChange={() => dispatch(toggleStatus(_id))} />
+            <input type="checkbox" checked={todo.completed} onChange={() => dispatch(toggleStatus(todo._id))} />
             <span>{todo.title}</span>
             {/* @ts-ignore */}
             <button onClick={() => removTodo(todo._id)}>Удалить</button>

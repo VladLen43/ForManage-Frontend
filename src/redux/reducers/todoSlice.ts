@@ -34,11 +34,13 @@ export const toggleStatus = createAsyncThunk (
     'todos/toggleStatus',
 
     async (id, {getState, dispatch}) => {
+        console.log(id)
         //@ts-ignore
         const comp:todoList = getState().todos.list.find(todo => todo._id === id);
         const {data} = await axios.patch(`/todos/${id}`, {
-                completed: !comp
+            completed: !comp.completed 
         })
+        console.log(comp.completed)
         return data;
     }
 )
@@ -146,7 +148,8 @@ const todoSlice = createSlice({
             state.list = state.list.filter(todo => todo._id !== action.payload._id)
         },
         changeStatus(state, action : PayloadAction<changeStatuss>) {
-            const todo = state.list.find(todo => todo._id === action.payload._id)
+            //@ts-ignore
+            const todo = state.list.find(todo => todo._id === action.payload)
             if (todo) {
                 todo.completed = !todo.completed
             }
@@ -169,18 +172,21 @@ const todoSlice = createSlice({
             })
             .addCase(deleteTodos.fulfilled, (state,action) => {
                 //@ts-ignore
-                    state.list = state.list.filter(todo => todo.id !== action.payload.id)
+                    state.list = state.list.filter(todo => todo._id !== action.meta.arg)
             })
             .addCase(deleteTodos.rejected, (state,action) => {
                               //@ts-ignore
-                state.list = state.list.filter(todo => todo.id !== action.payload.id)
+                state.list = state.list.filter(todo => todo._id !== action.payload._id)
                 state.loading = false;
                 state.error = action.payload
             })
             .addCase(toggleStatus.fulfilled, (state,action) => {
                 state.loading = false;
                 state.error = action.payload
-                state.list = action.payload
+                const todo = state.list.find(todo => todo._id === action.payload)
+            if (todo) {
+                todo.completed = !todo.completed
+            }
             })
             .addCase(toggleStatus.rejected, (state,action) => {
                 state.loading = false;

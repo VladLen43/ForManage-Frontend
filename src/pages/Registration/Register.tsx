@@ -43,7 +43,7 @@ export const Register = () => {
     <div className={styles.container}>
       <h1>Зарегестрируйтесь</h1>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form} action="">
-         <TextField {...register('email', { required: 'Укажите почту'})} type='email' error={Boolean(errors.email?.message)} helperText={errors.email?.message} id="standard-basic" label="Standard" variant="standard" />
+         <TextField placeholder='Почта' {...register('email', { required: 'Укажите почту'})} type='email' error={Boolean(errors.email?.message)} helperText={errors.email?.message} id="standard-basic" label="Standard" variant="standard" />
          <TextField {...register('fullName', { required: 'Укажите Полное Имя'})} error={Boolean(errors.fullName?.message)} helperText={errors.fullName?.message} type='text'  id="standard-basic" label="Standard" variant="standard" />
          <TextField {...register('password', { required: 'Укажите пароль'})} error={Boolean(errors.password?.message)} helperText={errors.password?.message} id="standard-basic" label="Standard" variant="standard" />
          <Button disabled={!isValid} type='submit' variant="contained">Зарегестрироваться</Button>

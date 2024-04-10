@@ -9,6 +9,7 @@ import { LoginPage } from './pages/Authorization/Login';
 import { Home } from './pages/Home';
 import { fetchAuthMe, isAuth } from './redux/reducers/auth';
 import { Register } from './pages/Registration/Register';
+import { Profile } from './pages/Profile/Profile';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
           <Route path='/login' element={<LoginPage/>} />
           <Route path='/' element={<Home />} />
           <Route path='/register' element={<Register/>} />
+          <Route path='/profile' element={<Profile/>} />
         </Routes>
       
     </div>

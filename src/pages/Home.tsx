@@ -9,6 +9,7 @@ import { isAuth, logout } from '../redux/reducers/auth'
 import { Inputt } from '../components/Input/Input'
 import { useDispatch } from 'react-redux'
 import { todoList } from '../redux/reducers/types'
+import { Header } from '../components/Header/Header'
 
 export const Home = () => {
 
@@ -69,6 +70,7 @@ export const Home = () => {
    
   return (
     <div className={styles.container}>
+      <Header />
         <h1>Todo List</h1>
         {/* <Inputt></Inputt> */}
         <label>
@@ -92,7 +94,10 @@ export const Home = () => {
               }} />
             <span>{todo.title}</span>
             {/* @ts-ignore */}
-            <button onClick={() => removTodo(todo._id)}>Удалить</button>
+            <button onClick={() => {
+              if( window.confirm('Вы дейтсвительно хотите удалить?'))
+              removTodo(todo._id)
+            }}>Удалить</button>
     
         </li>
         )) 

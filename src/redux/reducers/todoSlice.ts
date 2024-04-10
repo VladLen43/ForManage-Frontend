@@ -34,14 +34,13 @@ export const toggleStatus = createAsyncThunk (
     'todos/toggleStatus',
 
     async (id, {getState, dispatch}) => {
-        console.log(id)
         //@ts-ignore
         const comp:todoList = getState().todos.list.find(todo => todo._id === id);
-        const {data} = await axios.patch(`/todos/${id}`, {
+       const res = await axios.patch(`/todos/${comp._id}`, {
             completed: !comp.completed 
         })
-        console.log(comp.completed)
-        return data;
+        const result = Object(res.data.json())
+        return result;
     }
 )
 // export const toggleStatus = createAsyncThunk(
@@ -147,7 +146,7 @@ const todoSlice = createSlice({
         removeTodo(state, action : PayloadAction<removeTodos>) {
             state.list = state.list.filter(todo => todo._id !== action.payload._id)
         },
-        changeStatus(state, action : PayloadAction<changeStatuss>) {
+        changeStatus(state, action ) {
             //@ts-ignore
             const todo = state.list.find(todo => todo._id === action.payload)
             if (todo) {
@@ -183,10 +182,11 @@ const todoSlice = createSlice({
             .addCase(toggleStatus.fulfilled, (state,action) => {
                 state.loading = false;
                 state.error = action.payload
-                const todo = state.list.find(todo => todo._id === action.payload)
-            if (todo) {
-                todo.completed = !todo.completed
-            }
+                //@ts-ignore
+            //     const todo = state.list.find(todo => todo._id === action.meta.arg)
+            // if (todo) {
+            //     todo.completed = !todo.completed
+            // }
             })
             .addCase(toggleStatus.rejected, (state,action) => {
                 state.loading = false;

@@ -60,11 +60,11 @@ export const Home = () => {
     
     
     const [title, setText] = React.useState('');
-    
-    const isComplete = (id: any) => {
-      // dispatch(changeStatus(id))
-      //@ts-ignore
+    //@ts-ignore
+    const isComplete = (id) => {
+           //@ts-ignore
       dispatch(toggleStatus(id))
+       dispatch(changeStatus(id))
     }
    
   return (
@@ -85,7 +85,11 @@ export const Home = () => {
           // <TodoComponent key= {index} _id={todo._id} title={todo.title} completed={todo.completed} />
           <li key={todo._id}>       
           {/*  @ts-ignore */}   
-            <input type="checkbox" checked={todo.completed} onChange={() => dispatch(toggleStatus(todo._id))} />
+            <input type="checkbox" checked={todo.completed} onChange={() => {
+                //@ts-ignore
+              dispatch(toggleStatus(todo._id))
+              dispatch(changeStatus(todo._id))
+              }} />
             <span>{todo.title}</span>
             {/* @ts-ignore */}
             <button onClick={() => removTodo(todo._id)}>Удалить</button>

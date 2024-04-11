@@ -3,6 +3,7 @@ export type todoList = {
     title: string;
     completed: boolean;
     user: string | number | undefined;
+    imageUrl: string;
 
 }
 

@@ -8,7 +8,6 @@ import { fetchAuthMe, isAuth } from '../../redux/reducers/auth'
 export const Profile = () => {
     useEffect(() => {
         fetchAuthMe()
-    
     },[])
     
     const user = useAppSelector((state) => state.auth.data)
@@ -19,10 +18,13 @@ export const Profile = () => {
         <Button ><Link to="/">На главную</Link></Button>
         {/* @ts-ignore */}
         <div>Имя: {user?.fullName}</div>
+        {/* @ts-ignore */}
+        <img src={user?.avatarUrl} alt="..." />
          {/* @ts-ignore */}
          <div>Email: {user?.email}</div>
           {/* @ts-ignore */}
           <div>Зарегестрирован: {user?.createdAt}</div>
+     
     </div>
   )
 }

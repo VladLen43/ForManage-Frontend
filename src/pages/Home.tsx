@@ -25,86 +25,68 @@ export const Home = () => {
 
     if(!isAutht) {
         navigate('/login')
-      }
-     
+      }   
 
-    const handleLogout = () => {
-        dispatch(logout())
-        window.localStorage.removeItem('token')
-    }        
-    console.log(todos)
     const removTodo = (id: any) => {
       dispatch(removeTodo(id))
       dispatch(deleteTodos(id))
     }
-    const addTask = () => {
-      //@ts-ignore
-      const user = userData?._id
-      if(title.length > 3) {
-          //@ts-ignore
-       //dispatch(addTodo(title, user))
-        //@ts-ignore
-        dispatch(createTodo(title,user))
-        setText('')
-      } else {
-        alert('введите что нибьуль')
-      }
-    }
+
     useEffect(() => {
-      const fetch = async () => {
-        //@ts-ignore
-       await dispatch(fetchTodo(user))
-      }
-      fetch()
+        const fetch = async () => {
+            //@ts-ignore
+            await dispatch(fetchTodo(user))
+        }
+
+      fetch();
       
     },[dispatch])
     
-    
-    const [title, setText] = React.useState('');
-    //@ts-ignore
-    const isComplete = (id) => {
-           //@ts-ignore
-      dispatch(toggleStatus(id))
-       dispatch(changeStatus(id))
-    }
-   
   return (
     <div className={styles.container}>
       <Header />
-        <h1>Todo List</h1>
-        {/* <Inputt></Inputt> */}
-        <label>
-          <Input type="text" value={title} onChange={event => setText(event.target.value)} />
-          <Button onClick={addTask}>Добавить</Button>
-    </label>
-      {loading === true && <h2>Loading...</h2>}
-      {error && <h2>{error}</h2>}
-      <ul>
-        { /* @ts-ignore */}
+        <h1>Time Manager</h1>
+          <div className={styles.content}>
+            
+                  {loading === true && <h2>Loading...</h2>}
+                  {error && <h2>{error}</h2>}
+
+ 
+
+      <ul className={styles.todos}>
+      <h1>Список добавленных дел</h1>
         { 
          todos.map((todo, index) => (
-          //@ts-ignore
-          // <TodoComponent key= {index} _id={todo._id} title={todo.title} completed={todo.completed} />
-          <li key={todo._id}>       
-          {/*  @ts-ignore */}   
-            <input type="checkbox" checked={todo.completed} onChange={() => {
+
+          <li key={todo._id}>
+
+            { todo.imageUrl === "" ? <div></div> : <img src={todo.imageUrl} alt="..." />}
+
+            <input 
+            className={styles.check} 
+            type="checkbox" 
+            checked={todo.completed} 
+            onChange={() => {
                 //@ts-ignore
               dispatch(toggleStatus(todo._id))
               dispatch(changeStatus(todo._id))
               }} />
+
             <span>{todo.title}</span>
-            {/* @ts-ignore */}
-            <button onClick={() => {
+
+            <Button variant='outlined' onClick={() => {
+
               if( window.confirm('Вы дейтсвительно хотите удалить?'))
               removTodo(todo._id)
-            }}>Удалить</button>
-    
+
+             }}  
+              >Удалить</Button>
         </li>
         )) 
         
         }
        
-      </ul>
-      <Button onClick={handleLogout} variant="contained">Выйти</Button>
+        </ul>
+      </div>
     </div>
   )}

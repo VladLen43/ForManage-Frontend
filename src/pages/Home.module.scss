@@ -4,8 +4,70 @@
     flex-direction: column;
     align-items: center;
     list-style: none;
+    gap: 20px;
 
-    button {
-        
+    
+    .content{
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        width: 100vw;
+
+        @media (max-width: 500px) {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        label {
+            width: 50%;
+
+            @media (max-width: 500px) {
+                width: 100%;
+            }
+
+            input{
+                width: 100%;
+
+            }
+        }
+
+        .todos {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+            gap: 20px;
+            height: 40%;
+            width: 50%;
+            overflow: scroll;
+
+
+            @media (max-width: 500px) {
+                width: 100%;;
+            }
+
+                li { 
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    border: 1px solid gainsboro;
+                    padding: 10px;
+                    border-radius: 10px;
+
+
+                        input {
+                            padding: 5px;
+                            border-radius: 10px;
+                            border: none;
+                        }
+                        .check:checked + span {
+                            text-decoration: line-through;
+                            opacity: 1;
+                        }
+                 }
+        }
     }
+
 }

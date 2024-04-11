@@ -89,9 +89,10 @@ export const createTodo = createAsyncThunk(
             imageUrl: '',
             user: userId
         }
-        console.log(userId)
-        const {data} = await axios.post('/todos', todo)
-        return data;
+            console.log(userId)
+            const {data} = await axios.post('/todos', todo)
+            return data;
+       
     }
 )
 

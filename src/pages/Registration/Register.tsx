@@ -17,7 +17,8 @@ export const Register = () => {
     defaultValues: {
       email: '',
       fullName: '',
-      password: ''
+      password: '',
+      avatarUrl: '',
     },
     mode : 'onChange'
   });
@@ -43,9 +44,10 @@ export const Register = () => {
     <div className={styles.container}>
       <h1>Зарегестрируйтесь</h1>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form} action="">
-         <TextField placeholder='Почта' {...register('email', { required: 'Укажите почту'})} type='email' error={Boolean(errors.email?.message)} helperText={errors.email?.message} id="standard-basic" label="Standard" variant="standard" />
-         <TextField {...register('fullName', { required: 'Укажите Полное Имя'})} error={Boolean(errors.fullName?.message)} helperText={errors.fullName?.message} type='text'  id="standard-basic" label="Standard" variant="standard" />
-         <TextField {...register('password', { required: 'Укажите пароль'})} error={Boolean(errors.password?.message)} helperText={errors.password?.message} id="standard-basic" label="Standard" variant="standard" />
+         <TextField placeholder='Почта' {...register('email', { required: 'Укажите почту'})} type='email' error={Boolean(errors.email?.message)} helperText={errors.email?.message} id="standard-basic" label="Email" variant="standard" />
+         <TextField {...register('fullName', { required: 'Укажите Полное Имя'})} error={Boolean(errors.fullName?.message)} helperText={errors.fullName?.message} type='text'  id="standard-basic" label="Полное имя" variant="standard" />
+         <TextField {...register('password', { required: 'Укажите пароль'})} error={Boolean(errors.password?.message)} helperText={errors.password?.message} id="standard-basic" label="Пароль" variant="standard" />
+         <TextField {...register('avatarUrl', { required: 'Укажите ссылку на аватар'})} error={Boolean(errors.avatarUrl?.message)} helperText={errors.avatarUrl?.message} type='text'  id="standard-basic" label="Avatar" variant="standard" />
          <Button disabled={!isValid} type='submit' variant="contained">Зарегестрироваться</Button>
          <Link to="/login">Уже есть аккаунт? Авторизуйтесь !</Link>
         </form>

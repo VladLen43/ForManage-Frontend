@@ -14,7 +14,6 @@ import { Header } from '../components/Header/Header'
 export const Home = () => {
 
   const dispatch = useAppDispatch();
-  const dis = useDispatch();
   const isAutht = useAppSelector(isAuth);
   const navigate = useNavigate();
   const todos = useAppSelector(state => state.todos.list)
@@ -45,7 +44,6 @@ export const Home = () => {
   return (
     <div className={styles.container}>
       <Header />
-        <h1>Time Manager</h1>
           <div className={styles.content}>
             
                   {loading === true && <h2>Loading...</h2>}
@@ -60,20 +58,21 @@ export const Home = () => {
 
           <li key={todo._id}>
 
-            { todo.imageUrl === "" ? <div></div> : <img src={todo.imageUrl} alt="..." />}
-
-            <input 
-            className={styles.check} 
-            type="checkbox" 
-            checked={todo.completed} 
-            onChange={() => {
+            { todo.imageUrl === "" ? <div></div> : <img className={styles.image} src={`http://localhost:4444${todo.imageUrl}`} alt="..." />}
+            <div>
+              <input 
+                className={styles.check} 
+                type="checkbox" 
+                checked={todo.completed} 
+                onChange={() => {
                 //@ts-ignore
-              dispatch(toggleStatus(todo._id))
-              dispatch(changeStatus(todo._id))
-              }} />
+                  dispatch(toggleStatus(todo._id))
+                  dispatch(changeStatus(todo._id))
+                }} />
 
-            <span>{todo.title}</span>
-
+              <span>{todo.title}</span>
+              <Button variant="contained"><Link to={`/create/${todo._id}/edit`}>Редактирование</Link></Button>
+            </div>
             <Button variant='outlined' onClick={() => {
 
               if( window.confirm('Вы дейтсвительно хотите удалить?'))

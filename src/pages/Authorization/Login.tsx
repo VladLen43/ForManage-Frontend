@@ -41,8 +41,8 @@ export const LoginPage = () => {
     <div className={styles.container}>
       <h1>Авторизуйтесь</h1>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form} action="">
-         <TextField {...register('email', { required: 'Укажите почту'})} type='email' error={Boolean(errors.email?.message)} helperText={errors.email?.message} id="standard-basic" label="Standard" variant="standard" />
-         <TextField {...register('password', { required: 'Укажите пароль'})} error={Boolean(errors.password?.message)} helperText={errors.password?.message} id="standard-basic" label="Standard" variant="standard" />
+         <TextField {...register('email', { required: 'Укажите почту'})} type='email' error={Boolean(errors.email?.message)} helperText={errors.email?.message} id="standard-basic" label="Email" variant="standard" />
+         <TextField {...register('password', { required: 'Укажите пароль'})} error={Boolean(errors.password?.message)} helperText={errors.password?.message} id="standard-basic" label="Пароль" variant="standard" />
          <Button disabled={!isValid} type='submit' variant="contained">Войти</Button>
         </form>
         <Link to="/register">Нет аккаунта? Зарегистрируйтесь !</Link>

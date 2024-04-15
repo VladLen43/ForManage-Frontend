@@ -50,6 +50,7 @@ export const CreateTodo = () => {
             const { data } = await axios.post('/upload', formData)
             setImageUrl(data.url)
             console.log(data);
+            
         } catch (error) {
             console.log(error)
         }
@@ -81,7 +82,7 @@ export const CreateTodo = () => {
         const _id = isEditing ? id : data._id
 
 
-        location(`/posts/${_id}`)
+        location(`/todos/${_id}`)
 
         setLoading(false)
         } catch (error) {

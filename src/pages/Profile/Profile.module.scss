@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    img {
+        width: 30%;
+    }
+
+    .edit{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap:20px;
+
+            .photo_buttons {
+                display: flex;
+                gap : 20px
+            }
+    }
+
+    .profile{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap:20px;
+    }
+}

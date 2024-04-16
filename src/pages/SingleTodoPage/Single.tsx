@@ -18,21 +18,22 @@ export const Single = () => {
     const [tags, setTags] = useState([]);
     const [completed, setCompleted] = useState(false);
 
-
+   
     useEffect(() => {
            axios.get(`/todos/${id}`).then(({data}) => {
-            data.map((todo: any) => {
-
-                setImageUrl(todo.imageUrl);
-                setTitle(todo.title);
-                setText(todo.text);
-                setTags(todo.tags);
-                setCompleted(todo.completed);
-                setId(todo._id)
-
-             })
+                setImageUrl(data.imageUrl);
+                setTitle(data.title);
+                setText(data.text);
+                setTags(data.tags);
+                setCompleted(data.completed);
+                setId(data._id)
            })
-    },[dispatch])
+    },[])
+
+    const isSubmit = async () => {
+        await axios.patch(`/todos/${id}`, completed)
+        setCompleted(!completed)
+    }
 
   return (
     <div className={styles.container}>
@@ -43,18 +44,22 @@ export const Single = () => {
                  
                  { imageUrl ? <img src={`http://localhost:4444${imageUrl}`} alt="" /> : <div></div> }
                 
-                { tags[0] ? <span className={styles.ghosts}>Теги:<p className={styles.tags}>{tags.map((tag) => (
-                    <p className={styles.tag}>#{tag}</p>
-                ))}</p> </span> : <div></div> }
+                { tags[0] ? <span className={styles.ghosts}>
+                    Теги:<p className={styles.tags}>
+                        {tags.map((tag) => (
+                         <p className={styles.tag}>#{tag}</p>
+                    ))}</p></span> 
+                    : <div></div> }
 
                 <input type="checkbox" onChange={() => {
-                    //@ts-ignore
-                    dispatch(toggleStatus(ids))
-                    dispatch(changeStatus(ids))
-                    setCompleted(!completed)
-                }
+                     //@ts-ignore
+                     dispatch(toggleStatus(ids))
+                     dispatch(changeStatus(ids))
+                     setCompleted(!completed)
+                    }
                 //@ts-ignore
-                } checked={completed} />
+                } checked={completed} /> 
+                    <span>{completed ? 'Выполнено' : 'Пометить как выполненное'}</span>
                 { text ? <span className={styles.ghosts}>Подробное описание:<p>{text}</p></span> : <div></div>}
             </div>
     </div>

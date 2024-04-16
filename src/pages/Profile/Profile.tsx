@@ -79,7 +79,7 @@ export const Profile = () => {
                         <Button variant='outlined' onClick={isSubmit}>Сохранить</Button>
                     </div> :
                     <div className={styles.profile}>
-                        <h1>Профиль</h1>
+                        <h2>Профиль</h2>
                         <p>Имя: {fullName}</p>
                         {/* @ts-ignore */}
                         <img src={`http://localhost:4444${imageUrl}`} alt="..." />

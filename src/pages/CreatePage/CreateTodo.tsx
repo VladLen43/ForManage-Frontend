@@ -95,14 +95,16 @@ export const CreateTodo = () => {
       React.useEffect(() => {
         if(id) {
             axios.get(`/todos/${id}`).then(({ data }) => {
-                //@ts-ignore
+
                 setImageUrl(data.imageUrl);
-                //@ts-ignore
+
                 setText(data.text);
-                //@ts-ignore
-                setTags(data.tags.join(','));
-                  //@ts-ignore
+        
+                setTags(data.tags.join(', '));
+
                 setTitle(data.title);
+
+                console.log(data)
             })
 
         }
@@ -116,7 +118,7 @@ export const CreateTodo = () => {
             <label>
             
                 <h1>{isEditing ? 'Редактирование дела' :'Добавить дело'}</h1>
-                {/* @ts-ignore */}
+                    {/* @ts-ignore */}
                     <Button onClick={() => ref.current.click()}>
                         Загрузить картинку
                     </Button>

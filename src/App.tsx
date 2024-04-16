@@ -12,6 +12,7 @@ import { Register } from './pages/Registration/Register';
 import { Profile } from './pages/Profile/Profile';
 import { CreateTodo } from './pages/CreatePage/CreateTodo';
 import { Single } from './pages/SingleTodoPage/Single';
+import { CompletedTodos } from './pages/CompletedTodos/CompletedTodos';
 
 function App() {
 
@@ -32,7 +33,8 @@ function App() {
           <Route path='/profile/:id/edit' element={<Profile/>} />
           <Route path='/create' element={<CreateTodo/>} />
           <Route path='/create/:id/edit' element={<CreateTodo/>} />
-          <Route path='/todos/:id' element={<Single/>} /> 
+          <Route path='/todos/:id' element={<Single/>} />
+          <Route path='/todos/completed' element={<CompletedTodos />} /> 
         </Routes>
       
     </div>

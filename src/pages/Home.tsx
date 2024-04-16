@@ -55,11 +55,13 @@ export const Home = () => {
       <h1>Список добавленных дел</h1>
         { 
          todos.map((todo, index) => (
-
+         <div>
+          { todo.completed === false ?
           <li key={todo._id}>
 
             { todo.imageUrl === "" ? <div></div> : <img className={styles.image} src={`http://localhost:4444${todo.imageUrl}`} alt="..." />}
             <div>
+            <Link to={`todos/${todo._id}`}><h3>{todo.title}</h3></Link>
               <input 
                 className={styles.check} 
                 type="checkbox" 
@@ -70,10 +72,11 @@ export const Home = () => {
                   dispatch(changeStatus(todo._id))
                 }} />
 
-              <Link to={`todos/${todo._id}`}><span>{todo.title}</span></Link>
-              <Button variant="contained"><Link to={`/create/${todo._id}/edit`}>Редактирование</Link></Button>
+            <span>{todo.completed ? 'Выполнено' : 'Пометить как выполненное'}</span>
+          
             </div>
-            <Button variant='outlined' onClick={() => {
+            <Button className={styles.todo_buttons} variant="contained"><Link to={`/create/${todo._id}/edit`}>Редактирование</Link></Button>
+            <Button className={styles.todo_buttons} variant='outlined' onClick={() => {
 
               if( window.confirm('Вы дейтсвительно хотите удалить?'))
               removTodo(todo._id)
@@ -81,6 +84,8 @@ export const Home = () => {
              }}  
               >Удалить</Button>
         </li>
+         : <div></div> } 
+        </div>
         )) 
         
         }

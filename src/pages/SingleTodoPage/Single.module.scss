@@ -36,5 +36,9 @@
                 color: grey;
                 width: 100%;
             }
+
+            input:checked + span {
+                text-decoration: line-through;
+            }
         }
 }

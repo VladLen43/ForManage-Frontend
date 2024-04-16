@@ -70,7 +70,7 @@ export const Home = () => {
                   dispatch(changeStatus(todo._id))
                 }} />
 
-              <span>{todo.title}</span>
+              <Link to={`todos/${todo._id}`}><span>{todo.title}</span></Link>
               <Button variant="contained"><Link to={`/create/${todo._id}/edit`}>Редактирование</Link></Button>
             </div>
             <Button variant='outlined' onClick={() => {

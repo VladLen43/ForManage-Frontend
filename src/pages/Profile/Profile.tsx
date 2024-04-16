@@ -28,8 +28,7 @@ export const Profile = () => {
             axios.get('auth/me').then(({ data }) => {
                 setFullName(data.fullName);
                 setImageUrl(data.avatarUrl);
-                //@ts-ignore
-             
+                console.log(data)
             })
     
     },[])

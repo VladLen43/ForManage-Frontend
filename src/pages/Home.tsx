@@ -75,14 +75,16 @@ export const Home = () => {
             <span>{todo.completed ? 'Выполнено' : 'Пометить как выполненное'}</span>
           
             </div>
-            <Button className={styles.todo_buttons} variant="contained"><Link to={`/create/${todo._id}/edit`}>Редактирование</Link></Button>
-            <Button className={styles.todo_buttons} variant='outlined' onClick={() => {
+            <div className={styles.rightButtons}>
+                <Button className={styles.todo_buttons} variant="contained"><Link to={`/create/${todo._id}/edit`}>Редактировать</Link></Button>
+                <Button className={styles.todo_buttons} variant='outlined' onClick={() => {
 
               if( window.confirm('Вы дейтсвительно хотите удалить?'))
               removTodo(todo._id)
 
              }}  
               >Удалить</Button>
+             </div> 
         </li>
          : <div></div> } 
         </div>

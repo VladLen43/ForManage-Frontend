@@ -5,6 +5,15 @@
     align-items: center;
     list-style: none;
     gap: 20px;
+    color: white;
+
+        a{
+            text-decoration: none;
+            color: white;
+        }
+        button {
+            color: white;
+       }
 
     
     .content{
@@ -43,8 +52,13 @@
             width: 50%;
             overflow: scroll;
 
+            .rightButtons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            
                 .todo_buttons{
-                    color: black;
+                    color: white;
                     text-decoration: none;
                     list-style: none;
 
@@ -52,6 +66,7 @@
                             color: white;
                         }
                 }
+            }
 
 
             @media (max-width: 500px) {

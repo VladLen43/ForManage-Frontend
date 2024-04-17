@@ -4,11 +4,13 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    background-color: white;
 
         .form {
             display: flex;
             flex-direction: column;
             width: 30%;
             gap: 30px;
+            color: white;;
         }
 }

@@ -4,11 +4,31 @@
     align-items: center;
     width: 100%;
     gap: 20px;
+    // color: white;
+
+
+    // a{
+    //     text-decoration: none;
+    //     color: white;
+    // }
+    // button {
+    //     color: white;
+    // }
+    // input {
+    //     color: white;
+    // }
+    // textarea {
+    //     color: white;
+    // }
+
 
         .content {
             display: flex;
             flex-direction: column;
             width: 40%;
+            background-color: aliceblue;
+            padding: 40px;
+            border-radius: 10px;
 
             label {
                 display: flex;

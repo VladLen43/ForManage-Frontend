@@ -11,9 +11,11 @@ export const Header = () => {
     const navigate = useNavigate()
 
     const handleLogout = () => {
-        dispatch(logout())
-        window.localStorage.removeItem('token')
-        navigate('/login')
+        if(window.confirm('Вы действительно хотите выйти из аккаунта ?')) {
+            dispatch(logout())
+            window.localStorage.removeItem('token')
+            navigate('/login')
+        }
     }     
 
   return (

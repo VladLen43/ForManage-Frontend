@@ -2,6 +2,14 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    color: white;
+
+    p{
+        color: #fff;
+    }
+    h1{
+        color: white;
+    }
 
         .content {
             display: flex;
@@ -21,7 +29,7 @@
                     color: gray;
 
                         .tag{
-                            color: black;
+                            color: white;
                         }
                 }
 

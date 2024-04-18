@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './CompTodos.module.scss'
 import { Header } from '../../components/Header/Header'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
@@ -38,20 +38,22 @@ export const CompletedTodos = () => {
       const isComplete = () => {
        
       }
+      const [hide, setHide] = useState(false)
   return (
     <div className={styles.container}>
-       <Header />
-        <div className={styles.content}>
+       <Header hide={hide}  setHide={setHide}/>
+       <button className={styles.hide_button} style={hide ? {color: 'white',transform: 'translateX(0%)'} : {color: 'black',transform: 'translateX(0%)'} } onClick={() => setHide(!hide)}>{hide ? '>>' : '<<'}</button>
+        <div className={styles.content} style={hide ? {transform: 'translateX(-8%)'} : {transform: 'translateX(0%)'}}>
         <ul className={styles.todos}>
       <h1>Список выполненных дел</h1>
         { 
          todos.map((todo, index) => (
-            <div>
+            <div className={styles.one_todo}>
                 {todo.completed === true ? 
           <li key={todo._id}>
             
             { todo.imageUrl === "" ? <div></div> : <img className={styles.image} src={`http://localhost:4444${todo.imageUrl}`} alt="..." />}
-            <div>
+            <div >
             <Link to={`/todos/${todo._id}`}><h3>{todo.title}</h3></Link>
               <input 
                 className={styles.check} 

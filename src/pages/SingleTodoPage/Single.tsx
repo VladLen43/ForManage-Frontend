@@ -34,11 +34,13 @@ export const Single = () => {
         await axios.patch(`/todos/${id}`, completed)
         setCompleted(!completed)
     }
+    const [hide, setHide] = useState(false)
 
   return (
     <div className={styles.container}>
-        <Header />
-            <div className={styles.content}>
+        <Header hide={hide} setHide={setHide} />
+        <button className={styles.hide_button} style={hide ? {color: 'white',transform: 'translateX(0%)'} : {color: 'black',transform: 'translateX(0%)'} } onClick={() => setHide(!hide)}>{hide ? '>>' : '<<'}</button>
+            <div className={styles.content} style={hide ? {transform: 'translateX(-8%)'} : {transform: 'translateX(0%)'}}>
                 
                 <span className={styles.ghosts}>Название: <h1>{title}</h1></span>
                  
@@ -50,7 +52,7 @@ export const Single = () => {
                          <p className={styles.tag}>#{tag}</p>
                     ))}</p></span> 
                     : <div></div> }
-
+                <div>
                 <input type="checkbox" onChange={() => {
                      //@ts-ignore
                      dispatch(toggleStatus(ids))
@@ -60,6 +62,7 @@ export const Single = () => {
                 //@ts-ignore
                 } checked={completed} /> 
                     <span>{completed ? 'Выполнено' : 'Пометить как выполненное'}</span>
+                    </div> 
                 { text ? <span className={styles.ghosts}>Подробное описание:<p>{text}</p></span> : <div></div>}
             </div>
     </div>

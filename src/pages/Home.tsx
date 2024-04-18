@@ -40,11 +40,15 @@ export const Home = () => {
       fetch();
       
     },[dispatch])
+
+    const [hide, setHide] = useState(false)
     
   return (
     <div className={styles.container}>
-      <Header />
-          <div className={styles.content}>
+      <button className={styles.hide_button} style={hide ? {color: 'white',transform: 'translateX(0%)'} : {color: 'black',transform: 'translateX(0%)'} } onClick={() => setHide(!hide)}>{hide ? '>>' : '<<'}</button>
+      <Header hide={hide} setHide={setHide} />
+      
+          <div className={styles.content} style={hide ? {transform: 'translateX(-8%)'} : {transform: 'translateX(0%)'}}>
             
                   {loading === true && <h2>Loading...</h2>}
                   {error && <h2>{error}</h2>}
@@ -55,13 +59,14 @@ export const Home = () => {
       <h1>Список добавленных дел</h1>
         { 
          todos.map((todo, index) => (
-         <div>
+         <div className={styles.one_todo}>
           { todo.completed === false ?
           <li key={todo._id}>
 
             { todo.imageUrl === "" ? <div></div> : <img className={styles.image} src={`http://localhost:4444${todo.imageUrl}`} alt="..." />}
             <div>
             <Link to={`todos/${todo._id}`}><h3>{todo.title}</h3></Link>
+            <p>Теги: {todo.tags.join(',')}</p>
               <input 
                 className={styles.check} 
                 type="checkbox" 

@@ -111,10 +111,12 @@ export const CreateTodo = () => {
       },[])
 
       console.log(title, text, tags)
+      const [hide, setHide] = useState(false)
   return (
     <div className={styles.container}>
-        <Header/>
-        <div className={styles.content}>
+        <Header hide={hide} setHide={setHide}/>
+        <button className={styles.hide_button} style={hide ? {color: 'white',transform: 'translateX(0%)'} : {color: 'black',transform: 'translateX(0%)'} } onClick={() => setHide(!hide)}>{hide ? '>>' : '<<'}</button>
+        <div className={styles.content} style={hide ? {transform: 'translateX(-8%)'} : {transform: 'translateX(0%)'}}>
             <label>
             
                 <h1>{isEditing ? 'Редактирование дела' :'Добавить дело'}</h1>
@@ -133,9 +135,9 @@ export const CreateTodo = () => {
 
                         <Input placeholder='Напишите дело и нажмите на "добавить"' type="text" value={title} onChange={event => setTitle(event.target.value)} />
 
-                        <TextField  variant="standard" placeholder="Тэги" value={tags} onChange={event => setTags(event.target.value)} fullWidth />
+                        <Input placeholder="Тэги" value={tags} onChange={event => setTags(event.target.value)} />
 
-                        <TextField id="outlined-multiline-flexible" value={text} onChange={event => setText(event.target.value)} multiline rows={8} placeholder='Введите подробную информацию' />
+                        <TextField id="outlined-multiline-flexible" value={text} onChange={event => setText(event.target.value)} multiline rows={8}  placeholder='Введите подробную информацию' />
 
                         <Button onClick={isSubmit}>{isEditing ? 'Сохпанить' : 'Опубликовать'}</Button>
                     

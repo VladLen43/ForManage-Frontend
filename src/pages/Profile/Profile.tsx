@@ -62,19 +62,22 @@ export const Profile = () => {
 
         navigate('/profile')
     } 
-
+    const [hide, setHide] = useState(false)
 
   return (
-    <div className={styles.container}>
-        <Header/>
+    <div>
+         <button className={styles.hide_button} style={hide ? {color: 'white',transform: 'translateX(0%)'} : {color: 'black',transform: 'translateX(0%)'} } onClick={() => setHide(!hide)}>{hide ? '>>' : '<<'}</button>
+    <div style={hide ? {transform: 'translateX(-8%)'} : {transform: 'translateX(0%)'}} className={styles.container}>
+        <Header hide={hide} setHide={setHide} />
         { isEditing ? <div className={styles.edit}>
+                        <h3>Редактировать имя</h3>
                         <TextField value={fullName} onChange={(e) => setFullName(e.target.value)} id="outline-required" required>  </TextField>
+                        <img src={`http://localhost:4444${imageUrl}`} alt="image" />
                         <div className={styles.photo_buttons}>
                         {/* @ts-ignore */}
                             <Button variant='outlined' onClick={() => ref.current.click()}>Загрузить новое фото</Button>
                             {imageUrl && <Button variant='outlined' onClick={deleteFile} >Удалить фото</Button> }
                         </div>
-                        <img src={`http://localhost:4444${imageUrl}`} alt="image" />
                         <input hidden ref={ref} onChange={handleChangeFile} type='file'></input>
                         <Button variant='outlined' onClick={isSubmit}>Сохранить</Button>
                     </div> :
@@ -92,6 +95,7 @@ export const Profile = () => {
                     </div> }  
         
                 
+    </div>
     </div>
   )
 }

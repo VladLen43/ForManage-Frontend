@@ -1,17 +1,28 @@
 .container {
     display: flex;
     justify-content: center;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
     list-style: none;
     gap: 20px;
+    color: white;
+
+
+    a{
+        text-decoration: none;
+        color: white;
+    }
+    button {
+        color: white;
+    }
+
 
     
     .content{
         display: flex;
         justify-content: center;
         flex-direction: row;
-        width: 100vw;
+        width: 100%;
+        transition: all 0.5s ease-in-out;
 
         @media (max-width: 500px) {
             flex-direction: column;
@@ -43,15 +54,33 @@
             width: 50%;
             overflow: scroll;
 
-                .todo_buttons{
-                    color: black;
-                    text-decoration: none;
-                    list-style: none;
+
+            .one_todo{
+                background-color: white;
+                color: black;
+                border-radius: 10px;
+
+                    h3{
+                        color: black;
+                    }
+            }
+
+                .rightButtons {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+            
+                        .todo_buttons{
+                            color: black;
+                            text-decoration: none;
+                            list-style: none;
 
                         a{
                             color: white;
                         }
                 }
+            }
+
 
 
             @media (max-width: 500px) {
@@ -85,4 +114,22 @@
         }
     }
 
+}
+.hide_button{
+    height: 25px;
+    position: absolute;
+    right: 96.38%;
+    top: 2.1%;
+    border: none;
+    background-color: transparent;
+    color: black;
+    font-weight: 800;
+    font-size: 20px;
+    transition: all 0.5s ease-in-out;
+    z-index: 1;
+}
+
+.hide_button:hover{
+    color: black;
+    cursor: pointer;
 }

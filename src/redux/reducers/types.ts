@@ -4,7 +4,8 @@ export type todoList = {
     completed: boolean;
     user: string | number | undefined;
     imageUrl: string;
-
+    tags: [string | number | undefined];
+    text: string;
 }
 
 export type todoState = {

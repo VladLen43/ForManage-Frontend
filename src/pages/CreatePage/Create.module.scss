@@ -1,21 +1,77 @@
 .container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    flex-direction: row;
     align-items: center;
     width: 100%;
     gap: 20px;
+    // color: white;
+
+
+    // a{
+    //     text-decoration: none;
+    //     color: white;
+    // }
+    // button {
+    //     color: white;
+    // }
+    // input {
+    //     color: white;
+    // }
+    // textarea {
+    //     color: white;
+    // }
+
 
         .content {
             display: flex;
             flex-direction: column;
-            width: 40%;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            transition: all 0.5s ease-in-out;
 
             label {
                 display: flex;
                 flex-direction: column;
-                width: 100%;
+                align-items: center;
+                background-color: aliceblue;
+                padding: 40px;
+                width: 80%;
+                max-height: 80vh;
                 gap: 20px;
+                overflow: scroll;
                 margin-top: 20px;
+                border-radius: 10px;
+
+                    input{
+                        box-sizing: content-box;
+                        width: 50vw;
+                    }
+                    img{
+                        width: 70%;
+                    }
+                    textarea{
+                        width: 50vw;
+                    }
             }
         }
+}
+.hide_button{
+    height: 25px;
+    position: absolute;
+    right: 96.38%;
+    top: 2.1%;
+    border: none;
+    background-color: transparent;
+    color: black;
+    font-weight: 800;
+    font-size: 20px;
+    transition: all 0.5s ease-in-out;
+    z-index: 99;
+}
+
+.hide_button:hover{
+    color: black;
+    cursor: pointer;
 }

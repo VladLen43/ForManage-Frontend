@@ -1,13 +1,22 @@
 .container {
     display: flex;
-    flex-direction: column;
-    width: 100%;
+    justify-content: center;
+    flex-direction: row;
+    color: white;
+
+    p{
+        color: #fff;
+    }
+    h1{
+        color: white;
+    }
 
         .content {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
+            transition: all 0.5s ease-in-out;
 
                 img{
                     width: 20%;
@@ -21,7 +30,7 @@
                     color: gray;
 
                         .tag{
-                            color: black;
+                            color: white;
                         }
                 }
 
@@ -41,4 +50,22 @@
                 text-decoration: line-through;
             }
         }
+}
+.hide_button{
+    height: 25px;
+    position: absolute;
+    right: 96.38%;
+    top: 2.1%;
+    border: none;
+    background-color: transparent;
+    color: black;
+    font-weight: 800;
+    font-size: 20px;
+    transition: all 0.5s ease-in-out;
+    z-index: 1;
+}
+
+.hide_button:hover{
+    color: black;
+    cursor: pointer;
 }

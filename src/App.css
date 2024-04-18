@@ -2,10 +2,29 @@
   list-style: none;
   text-decoration: none;
 }
+/* .App:before {
+    content: '';
+    position: fixed; 
+    left: 0; right: 0; 
+    top: 0; bottom: 0; 
+    z-index: -1; 
+    background: url('/public/img/karina-aespa-drama-4k-wallpaper-uhdpaper.com-919@1@m.jpg') center / cover no-repeat;
+    filter: blur(8px); 
+} */
 .App {
   text-align: center;
   list-style: none;
-  
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+}
+.back{
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  z-index:0;
+  transparent: 7%;
+
 }
 
 .App-logo {

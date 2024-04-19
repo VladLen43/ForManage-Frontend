@@ -15,13 +15,34 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: left;
             width: 100%;
             transition: all 0.5s ease-in-out;
+            gap: 10px;
 
                 img{
-                    width: 20%;
+                    width: 40%;
                     border-radius: 10px;
                 }
+
+                .list{
+                    display: flex;
+                    justify-content: left;
+                    flex-direction: column;
+                    text-align: left;
+                    width: 60%;
+                    gap: 20px;
+                    transition: all 0.5s ease-in-out;
+
+                        a{
+                            text-decoration: none;
+                            color: #fff;
+                            font-weight: 600;
+                        }
+                    
+                }
+
+                
 
                 .tags{
                     display: flex;
@@ -39,7 +60,6 @@
                 }
             .ghosts {
                 display: flex;
-                justify-content: center;
                 align-items: center;
                 gap: 10px;
                 color: grey;

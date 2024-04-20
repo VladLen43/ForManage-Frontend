@@ -5,6 +5,8 @@ import { Link, useParams } from 'react-router-dom'
 import axios from '../../axios'
 import { changeStatus, fetchTodo, toggleStatus } from '../../redux/reducers/todoSlice'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+import { MenuItem, Select } from '@mui/material'
+import { stat } from 'fs/promises'
 
 export const Single = () => {
 
@@ -21,6 +23,9 @@ export const Single = () => {
     const [completed, setCompleted] = useState(false);
     const [fullName, setFullName] = useState('');
     const [avatarUrl, setAvatarUrl] = useState('');
+    const [status, setStatus] = useState(0);
+
+    console.log(status)
 
     useEffect(() => {
         axios.get('auth/me').then(({ data }) => {
@@ -71,7 +76,12 @@ export const Single = () => {
                     : <div></div> }
              
                        <span className={styles.ghosts}>Создатель:<p><Link to='/profile'>{fullName}</Link></p></span>
-                
+                       <span className={styles.ghosts}>Приоритет:</span>
+                       
+                       <h3>{status}</h3>
+                                <button onClick={() => setStatus(1)}>Низкий</button>
+                                <button onClick={() => setStatus(2)}>Средний</button>
+                                <button onClick={() => setStatus(3)}>Высокий</button>
                 <div>
                 <input type="checkbox" onChange={() => {
                      //@ts-ignore

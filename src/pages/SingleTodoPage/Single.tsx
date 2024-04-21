@@ -23,9 +23,10 @@ export const Single = () => {
     const [completed, setCompleted] = useState(false);
     const [fullName, setFullName] = useState('');
     const [avatarUrl, setAvatarUrl] = useState('');
-    const [status, setStatus] = useState(0);
+    const [priority, setPriority] = useState(0);
+    const [priorityText, setPriorityText] = useState('');
 
-    console.log(status)
+    console.log(priority)
 
     useEffect(() => {
         axios.get('auth/me').then(({ data }) => {
@@ -57,6 +58,22 @@ export const Single = () => {
     }
     const [hide, setHide] = useState(false)
 
+   
+
+    useEffect(() => {
+        if(priority===1) {
+            setPriorityText("Низкий")
+        }
+        if(priority===2) {
+            setPriorityText("Средний")
+        }
+        if(priority===3) {
+            setPriorityText("Высокий")
+        }
+    },[priority])
+       
+    
+
   return (
     <div className={styles.container}>
         <Header hide={hide} setHide={setHide} />
@@ -77,11 +94,15 @@ export const Single = () => {
              
                        <span className={styles.ghosts}>Создатель:<p><Link to='/profile'>{fullName}</Link></p></span>
                        <span className={styles.ghosts}>Приоритет:</span>
-                       
-                       <h3>{status}</h3>
-                                <button onClick={() => setStatus(1)}>Низкий</button>
-                                <button onClick={() => setStatus(2)}>Средний</button>
-                                <button onClick={() => setStatus(3)}>Высокий</button>
+                       {/*@ts-ignore  */}
+                       <h3>{priorityText}</h3>
+                                <span className={styles.statusBar}>
+                                    <button onClick={
+                                        () => setPriority(1)
+                                    }>Низкий</button>
+                                    <button onClick={() => setPriority(2)}>Средний</button>
+                                    <button onClick={() => setPriority(3)}>Высокий</button>
+                                </span>
                 <div>
                 <input type="checkbox" onChange={() => {
                      //@ts-ignore

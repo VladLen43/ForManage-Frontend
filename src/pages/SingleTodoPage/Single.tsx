@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 import axios from '../../axios'
 import { changeStatus, fetchTodo, toggleStatus } from '../../redux/reducers/todoSlice'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
-import { MenuItem, Select } from '@mui/material'
+import { Button, MenuItem, Select } from '@mui/material'
 import { stat } from 'fs/promises'
 
 export const Single = () => {
@@ -46,11 +46,18 @@ export const Single = () => {
                 setTags(data.tags);
                 setCompleted(data.completed);
                 setId(data._id);
+                setPriority(data.priority)
            })
            
     },[])
 
 
+    const changePriority = async (prior: number) => {
+        const field = {
+            priority: prior
+        }
+        await axios.patch(`/todos/${id}`, field )
+    }
 
     const isSubmit = async () => {
         await axios.patch(`/todos/${id}`, completed)
@@ -58,9 +65,14 @@ export const Single = () => {
     }
     const [hide, setHide] = useState(false)
 
+    const [showPriority, setShowPriority] = useState(false)
+   
    
 
     useEffect(() => {
+        if(priority === 0){
+            setPriorityText("Приоритет не выставлен")
+        }
         if(priority===1) {
             setPriorityText("Низкий")
         }
@@ -70,7 +82,8 @@ export const Single = () => {
         if(priority===3) {
             setPriorityText("Высокий")
         }
-    },[priority])
+    },[changePriority, priority])
+        
        
     
 
@@ -93,15 +106,33 @@ export const Single = () => {
                     : <div></div> }
              
                        <span className={styles.ghosts}>Создатель:<p><Link to='/profile'>{fullName}</Link></p></span>
+                    
                        <span className={styles.ghosts}>Приоритет:</span>
-                       {/*@ts-ignore  */}
-                       <h3>{priorityText}</h3>
-                                <span className={styles.statusBar}>
+                       
+                       <button className={styles.priority} onClick={() => setShowPriority(!showPriority)}><h3>{priorityText}</h3></button>
+                       
+                                <span style={showPriority ? {opacity: '1'} : {opacity: '0', display: 'none'}} className={styles.statusBar}>
                                     <button onClick={
-                                        () => setPriority(1)
+                                       () =>  {
+                                        changePriority(1);
+                                        setTimeout(() => setPriority(1), 100);
+                                        setShowPriority(false);
+                                    }
                                     }>Низкий</button>
-                                    <button onClick={() => setPriority(2)}>Средний</button>
-                                    <button onClick={() => setPriority(3)}>Высокий</button>
+                                    <button onClick={
+                                        () => {
+                                            changePriority(2);
+                                            setTimeout(() => setPriority(2), 100);
+                                            setShowPriority(false);
+                                        }
+                                        }>Средний</button>
+                                    <button onClick={
+                                        () => {                                  
+                                            changePriority(3);
+                                            setTimeout(() => setPriority(3), 100);
+                                            setShowPriority(false);
+                                        }
+                                    }>Высокий</button>
                                 </span>
                 <div>
                 <input type="checkbox" onChange={() => {

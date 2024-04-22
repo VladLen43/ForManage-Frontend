@@ -6,6 +6,7 @@ export type todoList = {
     imageUrl: string;
     tags: [string | number | undefined];
     text: string;
+    priority: number;
 }
 
 export type todoState = {

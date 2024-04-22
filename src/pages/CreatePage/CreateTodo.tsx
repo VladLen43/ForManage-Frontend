@@ -18,6 +18,7 @@ export const CreateTodo = () => {
     const [tags, setTags] = useState('');
     const [text, setText] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+    const [priority, setPriority] = useState(1);
     const [loading, setLoading] = useState(false);
 
     const userData = useAppSelector((state) => state.auth.data)
@@ -70,7 +71,7 @@ export const CreateTodo = () => {
         const fields = {
             title,
             text,
-            //@ts-ignore
+            priority,
             tags : tags.split(','),
             imageUrl
         }
@@ -99,6 +100,8 @@ export const CreateTodo = () => {
                 setImageUrl(data.imageUrl);
 
                 setText(data.text);
+
+                setPriority(data.priority);
         
                 setTags(data.tags.join(', '));
 
@@ -137,9 +140,11 @@ export const CreateTodo = () => {
 
                         <Input placeholder="Тэги" value={tags} onChange={event => setTags(event.target.value)} />
 
+                        <input type='hidden' placeholder="Приоритет" value={priority} />
+
                         <TextField id="outlined-multiline-flexible" value={text} onChange={event => setText(event.target.value)} multiline rows={8}  placeholder='Введите подробную информацию' />
 
-                        <Button onClick={isSubmit}>{isEditing ? 'Сохпанить' : 'Опубликовать'}</Button>
+                        <Button onClick={isSubmit}>{isEditing ? 'Сохранить' : 'Опубликовать'}</Button>
                     
 
             </label>

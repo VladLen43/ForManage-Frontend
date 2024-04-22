@@ -78,7 +78,7 @@ export const Home = () => {
                 }} />
 
             <span>{todo.completed ? 'Выполнено' : 'Пометить как выполненное'}</span>
-          
+            {/* <span>Приоритет: {todo.priority}</span> */}
             </div>
             <div className={styles.rightButtons}>
                 <Button className={styles.todo_buttons} variant="contained"><Link to={`/create/${todo._id}/edit`}>Редактировать</Link></Button>

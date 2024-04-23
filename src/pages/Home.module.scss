@@ -46,6 +46,7 @@
             flex-direction: column;
             width: 100%;
         }
+        
 
         label {
             width: 50%;
@@ -71,6 +72,14 @@
             height: 40%;
             width: 50%;
             overflow: scroll;
+
+            .search{
+                padding: 10px;
+                border-radius: 10px;
+                border: none;
+                width: 50%;
+            }
+            
 
                 .one_todo{
                     background-color: white;

@@ -41,7 +41,11 @@ export const Home = () => {
       
     },[dispatch])
 
-    const [hide, setHide] = useState(false)
+    const [hide, setHide] = useState(false);
+    const [value, setValue] = useState('');
+    const filteredTodos = todos.filter(todo => {
+        return todo.title.toLowerCase().includes(value.toLowerCase()) 
+    })
     
   return (
     <div className={styles.container}>
@@ -56,9 +60,13 @@ export const Home = () => {
  
 
       <ul className={styles.todos}>
+
       <h1>Список добавленных дел</h1>
+
+      <input type='text' className={styles.search} placeholder='Поиск...' onChange={(event) => setValue(event?.target.value)}></input>
+
         { 
-         todos.map((todo, index) => (
+         filteredTodos.map((todo, index) => (
          <div className={styles.one_todo}>
           { todo.completed === false ?
           <li key={todo._id}>

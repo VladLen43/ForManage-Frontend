@@ -38,16 +38,25 @@ export const CompletedTodos = () => {
       const isComplete = () => {
        
       }
+      const [value,setValue] = useState('')
       const [hide, setHide] = useState(false)
+      const filteredTodos = todos.filter(todo => {
+        return todo.title.toLowerCase().includes(value.toLowerCase()) 
+    })
+  
   return (
     <div className={styles.container}>
        <Header hide={hide}  setHide={setHide}/>
        <button className={styles.hide_button} style={hide ? {color: 'white',transform: 'translateX(0%)'} : {color: 'black',transform: 'translateX(0%)'} } onClick={() => setHide(!hide)}>{hide ? '>>' : '<<'}</button>
         <div className={styles.content} style={hide ? {transform: 'translateX(-8%)'} : {transform: 'translateX(0%)'}}>
         <ul className={styles.todos}>
+    
       <h1>Список выполненных дел</h1>
+
+      <input className={styles.search} placeholder='Поиск...' type="text" onChange={(e) =>setValue(e.target.value)} />
+  
         { 
-         todos.map((todo, index) => (
+         filteredTodos.map((todo, index) => (
             <div className={styles.one_todo}>
                 {todo.completed === true ? 
           <li key={todo._id}>

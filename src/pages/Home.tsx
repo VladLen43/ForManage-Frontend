@@ -2,7 +2,7 @@ import { Button, Input } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { TodoComponent } from '../components/TodoComponent/TodoComponent'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { addTodo, createTodo, deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus } from '../redux/reducers/todoSlice'
+import { addTodo, createTodo, deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc } from '../redux/reducers/todoSlice'
 import styles from './Home.module.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { isAuth, logout } from '../redux/reducers/auth'
@@ -10,13 +10,17 @@ import { Inputt } from '../components/Input/Input'
 import { useDispatch } from 'react-redux'
 import { todoList } from '../redux/reducers/types'
 import { Header } from '../components/Header/Header'
+import axios from '../axios'
 
-export const Home = () => {
+export const Home = React.memo( () => {
 
   const dispatch = useAppDispatch();
   const isAutht = useAppSelector(isAuth);
   const navigate = useNavigate();
+
+
   const todos = useAppSelector(state => state.todos.list)
+  console.log(todos)
   const {loading, error} = useAppSelector(state => state.todos)
   const userData = useAppSelector((state) => state.auth.data)
   //@ts-ignore
@@ -41,11 +45,59 @@ export const Home = () => {
       
     },[dispatch])
 
+    useEffect(() => {
+        //@ts-ignore
+        setTodos(todos[0])
+  
+
+    },[sortAsc])
+   
+
     const [hide, setHide] = useState(false);
     const [value, setValue] = useState('');
-    const filteredTodos = todos.filter(todo => {
-        return todo.title.toLowerCase().includes(value.toLowerCase()) 
-    })
+    const [todo, setTodos] = useState([])
+    
+
+    // const sortAsc = async () => {
+    //   const field = {
+    //     user: user,
+    //     sortType: -1
+    //   }
+    //   await axios.post('/todos/sortByName', field).then(({data}) => {
+    //     setTimeout(() => setTodos(data), 100)
+    //     console.log(todo)
+    //   })
+    // }
+
+    // const sortDesc = async () => {
+    //   const field = {
+    //     user: user,
+    //     sortType: 1
+    //   }
+    //   await axios.post('/todos/sortByName', field).then(({data}) => {
+    //     //@ts-ignore
+    //     setTimeout(() => setTodos(data), 100)
+    //     console.log(todo)
+    //   })
+    // }
+    
+    // const filteredTodos =
+    //   todos.filter(todo => {
+    //     return todo.title.toLowerCase().includes(value.toLowerCase())
+
+    // })
+
+    const sortNameAsc = () => {
+      const fields = {
+        user: user,
+        sortType: 1,
+      }
+      //@ts-ignore
+      dispatch(sortAsc(fields))
+      console.log(fields)
+    }
+   
+    
     
   return (
     <div className={styles.container}>
@@ -64,10 +116,14 @@ export const Home = () => {
       <h1>Список добавленных дел</h1>
 
       <input type='text' className={styles.search} placeholder='Поиск...' onChange={(event) => setValue(event?.target.value)}></input>
+        <button onClick={() => sortNameAsc()}>Сортировка По имени в минус</button> 
+       {/* <button onClick={ () => { setTimeout(() => sortAsc(), 100)}}>Сортировка По имени в плюс</button>  */}
+       
 
         { 
-         filteredTodos.map((todo, index) => (
-         <div className={styles.one_todo}>
+       
+         todos.map((todo) => (
+         <div key={todo._id} className={styles.one_todo}>
           { todo.completed === false ?
           <li key={todo._id}>
 
@@ -108,4 +164,4 @@ export const Home = () => {
         </ul>
       </div>
     </div>
-  )}
+  )})

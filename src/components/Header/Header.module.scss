@@ -42,6 +42,7 @@
             padding: 10px;
             height: 100vh;
             width: 250px;
+            color: grey;
             align-items: center;
             background-color: white;
 
@@ -53,11 +54,19 @@
                     button{
                         width: 100%;
                         background-color: transparent;
-                        color: black;
+                        color: grey;
                         box-shadow: none;
+                        transition: all 0.5s ease-in-out;
+                    }
+                    button:hover{
+                        color: black;
                     }
                     a {
                         width: 100%;
+                        color: grey;
+                        transition: all 0.5s ease-in-out;
+                    }
+                    a:hover{
                         color: black;
                     }
                 }

@@ -6,14 +6,16 @@ import { Link, useNavigate } from 'react-router-dom'
 import { isAuth } from '../../redux/reducers/auth'
 import { changeStatus, deleteTodos, fetchTodo, removeTodo, toggleStatus } from '../../redux/reducers/todoSlice'
 import { Button } from '@mui/material'
+import { user, userData } from '../../redux/reducers/types'
+import { Pagination } from '../../components/Pagination/Pagination'
 
 export const CompletedTodos = () => {
     const navigate = useNavigate();
     const isAutht = useAppSelector(isAuth);
     const dispatch = useAppDispatch()
-    const todos = useAppSelector(state => state.todos.list)
-    const userData = useAppSelector((state) => state.auth.data)
-    //@ts-ignore
+    const todos = useAppSelector(state => state.todos.list);
+    const userData : user | null = useAppSelector((state) => state.auth.data);
+
     const user = userData?._id
   
       if(!isAutht) {
@@ -35,14 +37,52 @@ export const CompletedTodos = () => {
         
       },[dispatch])
 
-      const isComplete = () => {
-       
-      }
+      
       const [value,setValue] = useState('')
       const [hide, setHide] = useState(false)
       const filteredTodos = todos.filter(todo => {
         return todo.title.toLowerCase().includes(value.toLowerCase()) 
     })
+    const isCompletedTodos = filteredTodos.filter(todo => {
+      return todo.completed === true
+    })
+
+    const [elementsOnPage, setElementsOnPage] = useState(3)
+    const [currentPage, setCurrentPage] = useState(1)
+
+    const lastPageIndex : number = elementsOnPage * currentPage;
+    const firstPageIndex = lastPageIndex - elementsOnPage;
+    const currentElements = isCompletedTodos.slice(firstPageIndex, lastPageIndex)
+
+    const lastPage = isCompletedTodos.length / elementsOnPage
+    const firstPage = 1
+
+    const nextPage = () => {
+      if(currentPage < lastPage){
+      for(let i = 1; i < lastPage; i++) {
+        setCurrentPage(prev => prev + 1)
+      }
+    }
+    else {
+      setCurrentPage(firstPage)
+    }    
+}
+
+
+    const prevPage = () => {
+      if(currentPage > 1) {
+          setCurrentPage(prev => prev - 1)
+      
+    } else {
+      setCurrentPage(lastPage)
+    
+  }
+}
+useEffect(() => {
+  if(isCompletedTodos.length <= 3) {
+    setCurrentPage(1)
+  }
+},[isCompletedTodos.length]) 
   
   return (
     <div className={styles.container}>
@@ -56,9 +96,9 @@ export const CompletedTodos = () => {
       <input className={styles.search} placeholder='Поиск...' type="text" onChange={(e) =>setValue(e.target.value)} />
   
         { 
-         filteredTodos.map((todo, index) => (
+         currentElements.map((todo, index) => (
             <div className={styles.one_todo}>
-                {todo.completed === true ? 
+                {/* {todo.completed === true ?  */}
           <li key={todo._id}>
             
             { todo.imageUrl === "" ? <div></div> : <img className={styles.image} src={`http://localhost:4444${todo.imageUrl}`} alt="..." />}
@@ -88,13 +128,29 @@ export const CompletedTodos = () => {
               >Удалить</Button>
              </div> 
             </li>
-            : <div></div>}
+            {/* : <div></div>} */}
         </div>
         )) 
         
         }
        
         </ul>
+       {isCompletedTodos.length > 3 ?
+      <div className={styles.pagination}>
+      <Pagination
+        firstIndex = {firstPageIndex} 
+        lastIndex={lastPageIndex} 
+        elementsPerPage={elementsOnPage}
+        totalElements={isCompletedTodos.length}
+        setCurrentPage={setCurrentPage} />
+          
+          <div className={styles.pagination_buttons}>
+              <button onClick={() => prevPage()}>{`<<`}</button>
+              <button onClick={() => nextPage()}>{`>>`}</button>
+          </div>
+      
+    </div> 
+     : <div></div> }
         </div>
     </div>
   )

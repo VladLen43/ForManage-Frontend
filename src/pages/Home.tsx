@@ -1,16 +1,13 @@
 import { Button, Input } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { TodoComponent } from '../components/TodoComponent/TodoComponent'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { addTodo, createTodo, deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc } from '../redux/reducers/todoSlice'
+import { deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc } from '../redux/reducers/todoSlice'
 import styles from './Home.module.scss'
 import { Link, useNavigate } from 'react-router-dom'
-import { isAuth, logout } from '../redux/reducers/auth'
-import { Inputt } from '../components/Input/Input'
-import { useDispatch } from 'react-redux'
-import { todoList } from '../redux/reducers/types'
+import { isAuth } from '../redux/reducers/auth'
 import { Header } from '../components/Header/Header'
 import axios from '../axios'
+import { Pagination } from '../components/Pagination/Pagination'
 
 export const Home = React.memo( () => {
 
@@ -55,8 +52,29 @@ export const Home = React.memo( () => {
 
     const [hide, setHide] = useState(false);
     const [value, setValue] = useState('');
-    const [todo, setTodos] = useState([])
-    
+    const [todo, setTodos] = useState([]);
+
+    const filteredTodos =
+    todos.filter(todo => {
+      return todo.title.toLowerCase().includes(value.toLowerCase())
+
+  })
+  const isCompletedTodos = filteredTodos.filter(todo => {
+    return todo.completed === false
+  })
+
+    //Pagination
+
+    const [elementsOnPage, setElementsOnPage] = useState(3)
+    const [currentPage, setCurrentPage] = useState(1)
+
+    const lastPageIndex : number = elementsOnPage * currentPage;
+    const firstPageIndex = lastPageIndex - elementsOnPage;
+    const currentElements = isCompletedTodos.slice(firstPageIndex, lastPageIndex)
+
+    const lastPage = isCompletedTodos.length / elementsOnPage
+    const firstPage = 1
+   
 
     // const sortAsc = async () => {
     //   const field = {
@@ -81,11 +99,7 @@ export const Home = React.memo( () => {
     //   })
     // }
     
-    // const filteredTodos =
-    //   todos.filter(todo => {
-    //     return todo.title.toLowerCase().includes(value.toLowerCase())
-
-    // })
+  
 
     const sortNameAsc = () => {
       const fields = {
@@ -96,6 +110,34 @@ export const Home = React.memo( () => {
       dispatch(sortAsc(fields))
       console.log(fields)
     }
+
+    const nextPage = () => {
+      if(currentPage < lastPage){
+      for(let i = 1; i < lastPage; i++) {
+        setCurrentPage(prev => prev + 1)
+      }
+    }
+    else {
+      setCurrentPage(firstPage)
+    }    
+}
+
+
+    const prevPage = () => {
+      if(currentPage > 1) {
+          setCurrentPage(prev => prev - 1)
+      
+    } else {
+      setCurrentPage(lastPage)
+    
+  }
+}
+
+useEffect(() => {
+  if(isCompletedTodos.length <= 3) {
+    setCurrentPage(1)
+  }
+},[isCompletedTodos.length]) 
    
     
     
@@ -122,7 +164,7 @@ export const Home = React.memo( () => {
 
         { 
        
-         todos.map((todo) => (
+         currentElements.map((todo) => (
          <div key={todo._id} className={styles.one_todo}>
           { todo.completed === false ?
           <li key={todo._id}>
@@ -162,6 +204,23 @@ export const Home = React.memo( () => {
         }
        
         </ul>
+        {isCompletedTodos.length > 3 ?
+            <div className={styles.pagination}>
+                <Pagination
+                    firstIndex = {firstPageIndex} 
+                    lastIndex={lastPageIndex} 
+                    elementsPerPage={elementsOnPage}
+                    totalElements={isCompletedTodos.length}
+                    setCurrentPage={setCurrentPage} 
+                />
+          
+          <div className={styles.pagination_buttons}>
+              <button onClick={() => prevPage()}>{`<<`}</button>
+              <button onClick={() => nextPage()}>{`>>`}</button>
+          </div>
+      
+    </div> 
+     : <div></div> }
       </div>
     </div>
   )})

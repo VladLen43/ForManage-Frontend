@@ -20,3 +20,13 @@ export type removeTodos = {
 export type changeStatuss = {
     _id: string;
 }
+export type user = {
+    _id: string;
+    fullName: string;
+    email: string;
+}
+
+export type userData = {
+    data: user | null,
+    status: string;
+}

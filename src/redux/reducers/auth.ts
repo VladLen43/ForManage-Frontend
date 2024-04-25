@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../axios";
+import { userData } from "./types";
 
 export const fetchUserData = createAsyncThunk(
     'auth/fetchUserData',
@@ -26,8 +27,8 @@ export const fetchAuthMe = createAsyncThunk(
 )
 
 
-const initialState = {
-    data: null,
+const initialState : userData = {
+    data: null ,
     status: 'loading',
 };
 

@@ -4,7 +4,7 @@
     flex-direction: row;
     list-style: none;
     gap: 20px;
-    height: auto;
+    height: 100%;
     color: white;
 
         a{
@@ -37,7 +37,8 @@
     .content{
         display: flex;
         justify-content: center;
-        flex-direction: row;
+        flex-direction: column;
+        align-items: center;
         width: 100vw;
         height: 100%;
         transition: all 0.5s ease-in-out;
@@ -139,6 +140,24 @@
                             opacity: 1;
                         }
                  }
+        }
+
+        .pagination {
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+           padding: 0;
+          
+
+                .pagination_buttons {
+                    display: flex;
+                    gap: 20px;
+
+                        button {
+                            cursor: pointer;
+                        }
+                }
         }
     }
 

@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import {todoState, removeTodos, changeStatuss, todoList } from "./types";
 import axios from '../../axios';
-import { useAppSelector } from "../hooks";
-import { authData, isAuth } from "./auth";
+
 
 
 export const fetchTodo = createAsyncThunk<todoList, undefined, {rejectValue : string}> (
@@ -127,6 +126,15 @@ export const createTodo = createAsyncThunk(
 //     }
 // )
 
+export const sortAsc = createAsyncThunk(
+    'todos/sortNameAsc',
+    async (fields) => {
+        const { data } = await axios.post('/todos/sortByName', fields)
+        console.log(data)
+        return data;
+    }
+)
+
 
 const initialState: todoState = {
     list: [],
@@ -205,6 +213,15 @@ const todoSlice = createSlice({
                 state.loading = false;
                 //@ts-ignore
                 state.list = action.payload
+                state.error = action.payload
+            })
+            .addCase(sortAsc.fulfilled, (state,action) => {
+                state.loading = false;
+                if(state.list.length > 0) {
+                    //@ts-ignore
+                    state.list = [...action.payload]
+                    
+                }
                 state.error = action.payload
             })
     }

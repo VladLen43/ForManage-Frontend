@@ -1,7 +1,7 @@
 import { Button, Input } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc, sortDesc } from '../redux/reducers/todoSlice'
+import { deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc, sortDesc, sortDefault } from '../redux/reducers/todoSlice'
 import styles from './Home.module.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { isAuth } from '../redux/reducers/auth'
@@ -71,7 +71,7 @@ export const Home = React.memo( () => {
     const firstPageIndex = lastPageIndex - elementsOnPage;
     const currentElements = isCompletedTodos.slice(firstPageIndex, lastPageIndex)
 
-    const lastPage = isCompletedTodos.length / elementsOnPage
+    const lastPage = Math.ceil(isCompletedTodos.length / elementsOnPage)
     const firstPage = 1
    
 
@@ -119,6 +119,15 @@ export const Home = React.memo( () => {
       console.log(fields)
     }
 
+    const sortNameDefault = () => {
+      const fields = {
+        user: user,
+      }
+      //@ts-ignore
+      dispatch(sortDefault(fields))
+      console.log(fields)
+    }
+
 
     const nextPage = () => {
       if(currentPage < lastPage){
@@ -133,11 +142,11 @@ export const Home = React.memo( () => {
 
 
     const prevPage = () => {
-      if(currentPage > 1) {
-          setCurrentPage(prev => prev - 1)
-      
+      if(currentPage <= firstPage) {
+        setCurrentPage(lastPage)
     } else {
-      setCurrentPage(lastPage)
+    
+      setCurrentPage(prev => prev - 1)
     
   }
 }
@@ -167,9 +176,12 @@ useEffect(() => {
       <h1>Список добавленных дел</h1>
 
       <input type='text' className={styles.search} placeholder='Поиск...' onChange={(event) => setValue(event?.target.value)}></input>
-        <button onClick={() => sortNameAsc()}>Сортировка По имени в минус</button> 
-       <button onClick={ () => sortNameDesc()}>Сортировка По имени в плюс</button> 
-       
+
+      <div className={styles.sorting}>
+          <button onClick={() => sortNameAsc()}>Сортировка По имени в минус</button> 
+          <button onClick={ () => sortNameDesc()}>Сортировка По имени в плюс</button> 
+          <button onClick={ () => sortNameDefault()}>Сортировка По имени дефолт</button> 
+      </div> 
 
         { 
        

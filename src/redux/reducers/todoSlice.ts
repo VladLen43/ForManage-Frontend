@@ -151,6 +151,18 @@ export const sortDesc = createAsyncThunk (
     }
 )
 
+export const sortDefault = createAsyncThunk (
+    'todos/sortDefault',
+
+    async (fields, {getState, dispatch}) => {
+       
+       const { data } = await axios.post(`/todos/sortDefault`, fields)
+
+        
+        return data;
+    }
+)
+
 
 const initialState: todoState = {
     list: [],
@@ -237,6 +249,11 @@ const todoSlice = createSlice({
             .addCase(sortDesc.fulfilled, (state,action) => {
                 state.list = action.payload
             })
+            .addCase(sortDefault.fulfilled, (state,action) => {
+                state.list = action.payload
+            })
+
+
 
     }
 })

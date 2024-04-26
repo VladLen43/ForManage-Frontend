@@ -1,7 +1,7 @@
 import { Button, Input } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc } from '../redux/reducers/todoSlice'
+import { deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc, sortDesc } from '../redux/reducers/todoSlice'
 import styles from './Home.module.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { isAuth } from '../redux/reducers/auth'
@@ -17,7 +17,6 @@ export const Home = React.memo( () => {
 
 
   const todos = useAppSelector(state => state.todos.list)
-  console.log(todos)
   const {loading, error} = useAppSelector(state => state.todos)
   const userData = useAppSelector((state) => state.auth.data)
   //@ts-ignore
@@ -110,6 +109,16 @@ export const Home = React.memo( () => {
       dispatch(sortAsc(fields))
       console.log(fields)
     }
+    const sortNameDesc = () => {
+      const fields = {
+        user: user,
+        sortType: -1,
+      }
+      //@ts-ignore
+      dispatch(sortDesc(fields))
+      console.log(fields)
+    }
+
 
     const nextPage = () => {
       if(currentPage < lastPage){
@@ -159,7 +168,7 @@ useEffect(() => {
 
       <input type='text' className={styles.search} placeholder='Поиск...' onChange={(event) => setValue(event?.target.value)}></input>
         <button onClick={() => sortNameAsc()}>Сортировка По имени в минус</button> 
-       {/* <button onClick={ () => { setTimeout(() => sortAsc(), 100)}}>Сортировка По имени в плюс</button>  */}
+       <button onClick={ () => sortNameDesc()}>Сортировка По имени в плюс</button> 
        
 
         { 

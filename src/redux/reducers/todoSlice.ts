@@ -126,11 +126,27 @@ export const createTodo = createAsyncThunk(
 //     }
 // )
 
-export const sortAsc = createAsyncThunk(
-    'todos/sortNameAsc',
-    async (fields) => {
-        const { data } = await axios.post('/todos/sortByName', fields)
-        console.log(data)
+
+export const sortAsc = createAsyncThunk (
+    'todos/sortAsc',
+
+    async (fields, {getState, dispatch}) => {
+       
+       const { data } = await axios.post(`/todos/sortByName`, fields)
+
+        
+        return data;
+    }
+)
+
+export const sortDesc = createAsyncThunk (
+    'todos/sortDesc',
+
+    async (fields, {getState, dispatch}) => {
+       
+       const { data } = await axios.post(`/todos/sortByName`, fields)
+
+        
         return data;
     }
 )
@@ -216,14 +232,12 @@ const todoSlice = createSlice({
                 state.error = action.payload
             })
             .addCase(sortAsc.fulfilled, (state,action) => {
-                state.loading = false;
-                if(state.list.length > 0) {
-                    //@ts-ignore
-                    state.list = [...action.payload]
-                    
-                }
-                state.error = action.payload
+                state.list = action.payload
             })
+            .addCase(sortDesc.fulfilled, (state,action) => {
+                state.list = action.payload
+            })
+
     }
 })
 

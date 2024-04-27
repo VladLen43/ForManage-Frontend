@@ -55,6 +55,17 @@
             height: 100%;
             width: 50%;
             overflow: scroll;
+
+                .sorting {
+                    display: flex;
+                    gap: 10px;
+                    color: black;
+
+                        button{
+                            color: black;
+                            cursor: pointer;
+                        }
+                }
             
 
             .search{

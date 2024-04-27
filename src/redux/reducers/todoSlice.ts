@@ -151,6 +151,55 @@ export const sortDesc = createAsyncThunk (
     }
 )
 
+export const sortDefault = createAsyncThunk (
+    'todos/sortDefault',
+
+    async (fields, {getState, dispatch}) => {
+       
+       const { data } = await axios.post(`/todos/sortDefault`, fields)
+
+        
+        return data;
+    }
+)
+
+export const sortAscDate = createAsyncThunk (
+    'todos/sortAscDate',
+
+    async (fields, {getState, dispatch}) => {
+       
+       const { data } = await axios.post(`/todos/sortByDate`, fields)
+
+        
+        return data;
+    }
+)
+
+export const sortDescDate = createAsyncThunk (
+    'todos/sortDescDate',
+
+    async (fields, {getState, dispatch}) => {
+       
+       const { data } = await axios.post(`/todos/sortByDate`, fields)
+
+        
+        return data;
+    }
+)
+
+// export const sortDefaultDate = createAsyncThunk (
+//     'todos/sortDefaultDate',
+
+//     async (fields, {getState, dispatch}) => {
+       
+//        const { data } = await axios.post(`/todos/sortByDateDefault`, fields)
+
+        
+//         return data;
+//     }
+// )
+
+
 
 const initialState: todoState = {
     list: [],
@@ -237,6 +286,20 @@ const todoSlice = createSlice({
             .addCase(sortDesc.fulfilled, (state,action) => {
                 state.list = action.payload
             })
+            .addCase(sortDefault.fulfilled, (state,action) => {
+                state.list = action.payload
+            })
+            .addCase(sortAscDate.fulfilled, (state,action) => {
+                state.list = action.payload
+            })
+            .addCase(sortDescDate.fulfilled, (state,action) => {
+                state.list = action.payload
+            })
+            // .addCase(sortDefaultDate.fulfilled, (state,action) => {
+            //     state.list = action.payload
+            // })
+
+
 
     }
 })

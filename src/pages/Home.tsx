@@ -1,19 +1,22 @@
-import { Button, Input } from '@mui/material'
+import { Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc, sortDesc } from '../redux/reducers/todoSlice'
+import { deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc, sortDesc, sortDefault, sortAscDate, sortDescDate } from '../redux/reducers/todoSlice'
 import styles from './Home.module.scss'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { isAuth } from '../redux/reducers/auth'
 import { Header } from '../components/Header/Header'
 import axios from '../axios'
 import { Pagination } from '../components/Pagination/Pagination'
+import { CompletedTodos } from './CompletedTodos/CompletedTodos'
 
 export const Home = React.memo( () => {
 
   const dispatch = useAppDispatch();
   const isAutht = useAppSelector(isAuth);
   const navigate = useNavigate();
+  const  id  = useParams()
+  console.log(id)
 
 
   const todos = useAppSelector(state => state.todos.list)
@@ -61,6 +64,9 @@ export const Home = React.memo( () => {
   const isCompletedTodos = filteredTodos.filter(todo => {
     return todo.completed === false
   })
+  const CompletedTodos = filteredTodos.filter(todo => {
+    return todo.completed === false
+  })
 
     //Pagination
 
@@ -71,33 +77,79 @@ export const Home = React.memo( () => {
     const firstPageIndex = lastPageIndex - elementsOnPage;
     const currentElements = isCompletedTodos.slice(firstPageIndex, lastPageIndex)
 
-    const lastPage = isCompletedTodos.length / elementsOnPage
+    const lastPage = Math.ceil(isCompletedTodos.length / elementsOnPage)
     const firstPage = 1
-   
 
-    // const sortAsc = async () => {
-    //   const field = {
-    //     user: user,
-    //     sortType: -1
-    //   }
-    //   await axios.post('/todos/sortByName', field).then(({data}) => {
-    //     setTimeout(() => setTodos(data), 100)
-    //     console.log(todo)
-    //   })
-    // }
+    const [filterButtonIndex, setFilterButtonIndex] = useState(0)
+    const buttonSortNameText = () => {
+      if(filterButtonIndex === 0) {
+        return 'Сортировка по имени (По умолчанию)'
+      }
+      if(filterButtonIndex === 1) {
+        return 'Cортировка по имени вниз'
+      }
+      if(filterButtonIndex === 2) {
+        return 'Сортировка по имени вверх'
+      } 
+    }
+    const [filterDateIndex, setFilterDateIndex] = useState(0)
+    const buttonSortDateText = () => {
+      // if(filterDateIndex === 0) {
+      //   return 'Сортировка по дате'
+      // }
+      if(filterDateIndex === 0) {
+        return 'Сортировка по дате сначала старые'
+      } 
+      if(filterDateIndex === 1) {
+        return 'Сортировка по дате сначала новые'
+      } 
+    }
 
-    // const sortDesc = async () => {
-    //   const field = {
-    //     user: user,
-    //     sortType: 1
-    //   }
-    //   await axios.post('/todos/sortByName', field).then(({data}) => {
-    //     //@ts-ignore
-    //     setTimeout(() => setTodos(data), 100)
-    //     console.log(todo)
-    //   })
-    // }
+    const sortName = () => {
+      if(filterButtonIndex < 2) {
+        setFilterButtonIndex((prev) => prev + 1 )
+      }
+      if(filterButtonIndex ===2) {
+        setFilterButtonIndex(0)
+      }
+    }
+    const sortDate = () => {
+      if(filterDateIndex < 1) {
+        setFilterDateIndex((prev) => prev + 1 )
+      }
+      if(filterDateIndex ===1) {
+        setFilterDateIndex(0)
+      }
+    }
     
+    useEffect(() => {
+      if(filterButtonIndex === 0) {
+        sortNameDefault()
+      }
+      if(filterButtonIndex ===1) {
+        sortNameDesc()
+        
+      }
+      if(filterButtonIndex ===2) {
+        sortNameAsc()
+       
+      }
+    
+    },[filterButtonIndex])
+     
+    useEffect(() => {
+      if(filterDateIndex === 0) {
+        sortDateAsc()
+  
+      }
+      if(filterDateIndex ===1) {
+        sortDateDesc()
+       
+      }
+      // if(filterDateIndex ===2) {
+      //   sortDateDesc()
+      // }
+    },[filterDateIndex])
   
 
     const sortNameAsc = () => {
@@ -119,6 +171,42 @@ export const Home = React.memo( () => {
       console.log(fields)
     }
 
+    const sortNameDefault = () => {
+      const fields = {
+        user: user,
+      }
+      //@ts-ignore
+      dispatch(sortDefault(fields))
+      console.log(fields)
+    }
+    const sortDateAsc = () => {
+      const fields = {
+        user: user,
+        sortType: 1,
+      }
+      //@ts-ignore
+      dispatch(sortAscDate(fields))
+      console.log(fields)
+    }
+    const sortDateDesc = () => {
+      const fields = {
+        user: user,
+        sortType: -1,
+      }
+      //@ts-ignore
+      dispatch(sortDescDate(fields))
+      console.log(fields)
+    }
+
+    // const sortDateDefault = () => {
+    //   const fields = {
+    //     user: user,
+    //   }
+    //   //@ts-ignore
+    //   dispatch(sortDefaultDate(fields))
+    //   console.log(fields)
+    // }
+
 
     const nextPage = () => {
       if(currentPage < lastPage){
@@ -133,11 +221,11 @@ export const Home = React.memo( () => {
 
 
     const prevPage = () => {
-      if(currentPage > 1) {
-          setCurrentPage(prev => prev - 1)
-      
+      if(currentPage <= firstPage) {
+        setCurrentPage(lastPage)
     } else {
-      setCurrentPage(lastPage)
+    
+      setCurrentPage(prev => prev - 1)
     
   }
 }
@@ -154,7 +242,8 @@ useEffect(() => {
     <div className={styles.container}>
       <button className={styles.hide_button} style={hide ? {color: 'white',transform: 'translateX(0%)'} : {color: 'black',transform: 'translateX(0%)'} } onClick={() => setHide(!hide)}>{hide ? '>>' : '<<'}</button>
       <Header hide={hide} setHide={setHide} />
-      
+
+        {}
           <div className={styles.content} style={hide ? {transform: 'translateX(-8%)'} : {transform: 'translateX(0%)'}}>
             
                   {loading === true && <h2>Loading...</h2>}
@@ -167,9 +256,12 @@ useEffect(() => {
       <h1>Список добавленных дел</h1>
 
       <input type='text' className={styles.search} placeholder='Поиск...' onChange={(event) => setValue(event?.target.value)}></input>
-        <button onClick={() => sortNameAsc()}>Сортировка По имени в минус</button> 
-       <button onClick={ () => sortNameDesc()}>Сортировка По имени в плюс</button> 
-       
+
+      <div className={styles.sorting}>
+          <button onClick={() => sortName()}>{buttonSortNameText()}</button> 
+          <button onClick={ () => sortDate()}>{buttonSortDateText()}</button> 
+          
+      </div> 
 
         { 
        
@@ -193,7 +285,7 @@ useEffect(() => {
                 }} />
 
             <span>{todo.completed ? 'Выполнено' : 'Пометить как выполненное'}</span>
-            {/* <span>Приоритет: {todo.priority}</span> */}
+           
             </div>
             <div className={styles.rightButtons}>
                 <Button className={styles.todo_buttons} variant="contained"><Link to={`/create/${todo._id}/edit`}>Редактировать</Link></Button>

@@ -187,17 +187,17 @@ export const sortDescDate = createAsyncThunk (
     }
 )
 
-// export const sortDefaultDate = createAsyncThunk (
-//     'todos/sortDefaultDate',
+export const sortDefaultDate = createAsyncThunk (
+    'todos/sortDefaultDate',
 
-//     async (fields, {getState, dispatch}) => {
+    async (fields, {getState, dispatch}) => {
        
-//        const { data } = await axios.post(`/todos/sortByDateDefault`, fields)
+       const { data } = await axios.post(`/todos/sortByDateDefault`, fields)
 
         
-//         return data;
-//     }
-// )
+        return data;
+    }
+)
 
 
 
@@ -295,9 +295,9 @@ const todoSlice = createSlice({
             .addCase(sortDescDate.fulfilled, (state,action) => {
                 state.list = action.payload
             })
-            // .addCase(sortDefaultDate.fulfilled, (state,action) => {
-            //     state.list = action.payload
-            // })
+            .addCase(sortDefaultDate.fulfilled, (state,action) => {
+                state.list = action.payload
+            })
 
 
 

@@ -8,7 +8,6 @@ import { isAuth } from '../redux/reducers/auth'
 import { Header } from '../components/Header/Header'
 import axios from '../axios'
 import { Pagination } from '../components/Pagination/Pagination'
-import { CompletedTodos } from './CompletedTodos/CompletedTodos'
 
 export const Home = React.memo( () => {
 
@@ -22,7 +21,6 @@ export const Home = React.memo( () => {
   const todos = useAppSelector(state => state.todos.list)
   const {loading, error} = useAppSelector(state => state.todos)
   const userData = useAppSelector((state) => state.auth.data)
-  //@ts-ignore
   const user = userData?._id
 
     if(!isAutht) {
@@ -96,7 +94,7 @@ export const Home = React.memo( () => {
     
     const buttonSortDateText = () => {
       if(filterDateIndex === 0) {
-        return 'Сортировка по дате'
+        return 'Сортировка по дате (По умолчанию)'
       }
       if(filterDateIndex === 1) {
         return 'Сортировка по дате сначала старые'
@@ -268,7 +266,7 @@ useEffect(() => {
       <input type='text' className={styles.search} placeholder='Поиск...' onChange={(event) => setValue(event?.target.value)}></input>
 
       <div className={styles.sorting}>
-          <button onClick={ () => {
+          <Button className={styles.sortButtons} variant='contained' onClick={ () => {
             if(filterDateIndex > 0) {
               setFilterDateIndex(0)
               // setTimeout(() => sortName(), 10)
@@ -278,8 +276,8 @@ useEffect(() => {
           }
             }> { buttonSortNameText()
 
-            }</button> 
-          <button onClick={ () => sortDate()}>{buttonSortDateText()}</button> 
+            }</Button> 
+          <Button variant='contained' className={styles.sortButtons} onClick={ () => sortDate()}>{buttonSortDateText()}</Button> 
           
       </div> 
 

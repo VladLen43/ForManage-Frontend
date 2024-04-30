@@ -130,7 +130,7 @@ export const createTodo = createAsyncThunk(
 export const sortAsc = createAsyncThunk (
     'todos/sortAsc',
 
-    async (fields, {getState, dispatch}) => {
+    async (fields) => {
        
        const { data } = await axios.post(`/todos/sortByName`, fields)
 

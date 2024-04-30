@@ -79,6 +79,10 @@
 
                         button {
                             cursor: pointer;
+                            box-sizing: border-box;
+                            text-transform: none;
+                            background-color: aliceblue;
+                            color: black;
                         }
                 }
 

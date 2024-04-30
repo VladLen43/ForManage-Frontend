@@ -271,7 +271,7 @@ useEffect(() => {
 
             { todo.imageUrl === "" ? <div></div> : <img className={styles.image} src={`http://localhost:4444${todo.imageUrl}`} alt="..." />}
             <div>
-            <Link to={`todos/${todo._id}`}><h3>{todo.title}</h3></Link>
+            <Link to={`/todos/${todo._id}`}><h3>{todo.title}</h3></Link>
             <p>Теги: {todo.tags.join(',')}</p>
               <input 
                 className={styles.check} 

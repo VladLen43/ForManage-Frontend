@@ -28,26 +28,11 @@ export const CreateTodo = () => {
     const user = userData?._id;
     const location = useNavigate();
 
-    // const addTask = () => {
-    //     //@ts-ignore
-    //     const user = userData?._id
-    //       if(title.length > 3) {
-    //         //@ts-ignore
-    //           dispatch(createTodo(title,user))
-    //           setText('')
-    //         } else {
-    //             alert('введите что нибьуль')
-    //         }
-    //   }
-
-     // const [title, setText] = React.useState('');
-
       const handleChangeFile = async (event: any) => {
         try {
             const formData = new FormData();
             const file = event.target.files[0];
             formData.append('image', file);
-            //@ts-ignore
             const { data } = await axios.post('/upload', formData)
             setImageUrl(data.url)
             console.log(data);
@@ -64,32 +49,32 @@ export const CreateTodo = () => {
 
       const isSubmit = async () => {
         try {
-            
         
         setLoading(true);
          
-        const fields = {
-            title,
-            text,
-            priority,
-            tags : tags.split(','),
-            imageUrl
-        }
+            const fields = {
+                title,
+                text,
+                priority,
+                tags : tags.split(','),
+                imageUrl
+            }
 
-            const { data } =  isEditing 
-            ? await axios.patch(`/todos/${id}` , fields)
-            : await axios.post('/todos', fields)
+                const { data } =  isEditing 
+                ? await axios.patch(`/todos/${id}` , fields)
+                : await axios.post('/todos', fields)
   
-        const _id = isEditing ? id : data._id
+                const _id = isEditing ? id : data._id
 
 
-        location(`/todos/${_id}`)
+                location(`/todos/${_id}`)
 
-        setLoading(false)
-        } catch (error) {
-        console.warn(error)
-        alert('Ошибка при загрузке') 
-        }
+                setLoading(false)
+
+            } catch (error) {
+                console.warn(error)
+                alert('Ошибка при загрузке') 
+            }
 
       }
 
@@ -125,13 +110,14 @@ export const CreateTodo = () => {
                 <h1>{isEditing ? 'Редактирование дела' :'Добавить дело'}</h1>
                     {/* @ts-ignore */}
                     <Button onClick={() => ref.current.click()}>
-                        Загрузить картинку
+                        Загрузить новую картинку
                     </Button>
                     { imageUrl && ( <> 
+                    
+                    <img className={styles.uploaded} src={`http://localhost:4444${imageUrl}`} alt="Uploaded" />
                     <Button variant="contained" color='error' onClick={onClickRemove}>
-                        Удалить
+                        Удалить картинку
                     </Button>
-                    <img src={`http://localhost:4444${imageUrl}`} alt="Uploaded" />
                     </>
                     )}
                         <input ref={ref} type="file" onChange={handleChangeFile} hidden/>

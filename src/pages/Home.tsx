@@ -1,14 +1,13 @@
 import { Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc, sortDesc, sortDefault, sortAscDate, sortDescDate } from '../redux/reducers/todoSlice'
+import { deleteTodos, fetchTodo, removeTodo,toggleStatus, changeStatus, sortAsc, sortDesc, sortDefault, sortAscDate, sortDescDate, sortDefaultDate } from '../redux/reducers/todoSlice'
 import styles from './Home.module.scss'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { isAuth } from '../redux/reducers/auth'
 import { Header } from '../components/Header/Header'
 import axios from '../axios'
 import { Pagination } from '../components/Pagination/Pagination'
-import { CompletedTodos } from './CompletedTodos/CompletedTodos'
 
 export const Home = React.memo( () => {
 
@@ -22,7 +21,6 @@ export const Home = React.memo( () => {
   const todos = useAppSelector(state => state.todos.list)
   const {loading, error} = useAppSelector(state => state.todos)
   const userData = useAppSelector((state) => state.auth.data)
-  //@ts-ignore
   const user = userData?._id
 
     if(!isAutht) {
@@ -92,15 +90,16 @@ export const Home = React.memo( () => {
         return 'Сортировка по имени вверх'
       } 
     }
-    const [filterDateIndex, setFilterDateIndex] = useState(0)
+    const [filterDateIndex, setFilterDateIndex] = useState(0);
+    
     const buttonSortDateText = () => {
-      // if(filterDateIndex === 0) {
-      //   return 'Сортировка по дате'
-      // }
       if(filterDateIndex === 0) {
+        return 'Сортировка по дате (По умолчанию)'
+      }
+      if(filterDateIndex === 1) {
         return 'Сортировка по дате сначала старые'
       } 
-      if(filterDateIndex === 1) {
+      if(filterDateIndex === 2) {
         return 'Сортировка по дате сначала новые'
       } 
     }
@@ -109,19 +108,19 @@ export const Home = React.memo( () => {
       if(filterButtonIndex < 2) {
         setFilterButtonIndex((prev) => prev + 1 )
       }
-      if(filterButtonIndex ===2) {
+      if(filterButtonIndex === 2) {
         setFilterButtonIndex(0)
       }
     }
     const sortDate = () => {
-      if(filterDateIndex < 1) {
+      if(filterDateIndex < 2) {
         setFilterDateIndex((prev) => prev + 1 )
       }
-      if(filterDateIndex ===1) {
+      if(filterDateIndex === 2 ) {
         setFilterDateIndex(0)
       }
     }
-    
+     // Отслеживание изменений в индексе сортировке по имени
     useEffect(() => {
       if(filterButtonIndex === 0) {
         sortNameDefault()
@@ -134,21 +133,30 @@ export const Home = React.memo( () => {
         sortNameAsc()
        
       }
+      if(filterButtonIndex > 0) {
+        setFilterDateIndex(0)
+      }
+      
     
     },[filterButtonIndex])
-     
+    // Отслеживание изменений в индексе сортировке по дате
     useEffect(() => {
       if(filterDateIndex === 0) {
-        sortDateAsc()
+        sortDateDefault()
   
       }
       if(filterDateIndex ===1) {
-        sortDateDesc()
+        setFilterButtonIndex(0)
+        sortDateAsc()
        
       }
-      // if(filterDateIndex ===2) {
-      //   sortDateDesc()
-      // }
+      if(filterDateIndex > 0) {
+        setFilterButtonIndex(0)
+       
+      }
+      if(filterDateIndex === 2) {
+        sortDateDesc()
+      }
     },[filterDateIndex])
   
 
@@ -198,14 +206,14 @@ export const Home = React.memo( () => {
       console.log(fields)
     }
 
-    // const sortDateDefault = () => {
-    //   const fields = {
-    //     user: user,
-    //   }
-    //   //@ts-ignore
-    //   dispatch(sortDefaultDate(fields))
-    //   console.log(fields)
-    // }
+    const sortDateDefault = () => {
+      const fields = {
+        user: user,
+      }
+      //@ts-ignore
+      dispatch(sortDefaultDate(fields))
+      console.log(fields)
+    }
 
 
     const nextPage = () => {
@@ -258,8 +266,18 @@ useEffect(() => {
       <input type='text' className={styles.search} placeholder='Поиск...' onChange={(event) => setValue(event?.target.value)}></input>
 
       <div className={styles.sorting}>
-          <button onClick={() => sortName()}>{buttonSortNameText()}</button> 
-          <button onClick={ () => sortDate()}>{buttonSortDateText()}</button> 
+          <Button className={styles.sortButtons} variant='contained' onClick={ () => {
+            if(filterDateIndex > 0) {
+              setFilterDateIndex(0)
+              // setTimeout(() => sortName(), 10)
+            } else { 
+              sortName()
+            }
+          }
+            }> { buttonSortNameText()
+
+            }</Button> 
+          <Button variant='contained' className={styles.sortButtons} onClick={ () => sortDate()}>{buttonSortDateText()}</Button> 
           
       </div> 
 
@@ -272,19 +290,19 @@ useEffect(() => {
 
             { todo.imageUrl === "" ? <div></div> : <img className={styles.image} src={`http://localhost:4444${todo.imageUrl}`} alt="..." />}
             <div>
-            <Link to={`todos/${todo._id}`}><h3>{todo.title}</h3></Link>
-            <p>Теги: {todo.tags.join(',')}</p>
-              <input 
-                className={styles.check} 
-                type="checkbox" 
-                checked={todo.completed} 
-                onChange={() => {
-                //@ts-ignore
-                  dispatch(toggleStatus(todo._id))
-                  dispatch(changeStatus(todo._id))
-                }} />
+                <Link to={`todos/${todo._id}`}><h3>{todo.title}</h3></Link>
+                  <p>Теги: {todo.tags.join(',')}</p>
+                     <input 
+                        className={styles.check} 
+                        type="checkbox" 
+                        checked={todo.completed} 
+                        onChange={() => {
+                        //@ts-ignore
+                            dispatch(toggleStatus(todo._id))
+                            dispatch(changeStatus(todo._id))
+                          }} />
 
-            <span>{todo.completed ? 'Выполнено' : 'Пометить как выполненное'}</span>
+              <span> {todo.completed ? 'Выполнено' : 'Пометить как выполненное'} </span>
            
             </div>
             <div className={styles.rightButtons}>
@@ -296,8 +314,8 @@ useEffect(() => {
 
              }}  
               >Удалить</Button>
-             </div> 
-        </li>
+            </div> 
+          </li>
          : <div></div> } 
         </div>
         )) 

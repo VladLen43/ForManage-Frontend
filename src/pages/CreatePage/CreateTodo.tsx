@@ -124,7 +124,7 @@ export const CreateTodo = () => {
 
                         <Input placeholder='Напишите дело и нажмите на "добавить"' type="text" value={title} onChange={event => setTitle(event.target.value)} />
 
-                        <Input placeholder="Тэги" value={tags} onChange={event => setTags(event.target.value)} />
+                        <Input placeholder="Напишите теги через запятую" value={tags} onChange={event => setTags(event.target.value)} />
 
                         <input type='hidden' placeholder="Приоритет" value={priority} />
 

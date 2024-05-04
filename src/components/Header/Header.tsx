@@ -26,7 +26,7 @@ export const Header:React.FC<HeaderProps> = ({hide, setHide}) => {
 
   return (
     <div className={styles.container} style={hide ? {transform: 'translateX(-115%)',transition: 'all 0.5s ease-in-out'} : {transform: 'translateX(0%)',transition: 'all 0.5s ease-in-out'}}>
-        <div>
+        <div className={styles.div_header}>
         <ul className={styles.header} >
             <li style={{marginTop: '50px'}}><Button variant='contained'><Link to="/profile">Профиль</Link></Button></li>
             <li><Button variant='contained'><Link to="/">Добавленные</Link></Button></li>
